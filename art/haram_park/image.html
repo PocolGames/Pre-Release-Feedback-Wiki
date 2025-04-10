@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Gallery</title>
+    <title>Image & Video Gallery</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            min-height: 100vh;
-            background-color: #f0f0f0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #fafafa;
             margin: 0;
-            padding: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
         }
         .gallery {
             display: grid;
@@ -26,77 +28,117 @@
         }
         .gallery img, .gallery video {
             width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-            object-fit: contain;
-        }
-        .gallery video {
-            max-height: 400px;
-        }
-        .gallery video.wide {
-            max-height: 1500px;
+            height: 200px;
             object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
         }
         .gallery img:hover, .gallery video:hover {
             transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .lightbox.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .lightbox img, .lightbox video {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 12px;
+        }
+        .lightbox video {
+            outline: none;
         }
         @media (max-width: 600px) {
             .gallery {
                 grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             }
-            .gallery video {
-                max-height: 300px;
+            .gallery img, .gallery video {
+                height: 150px;
             }
         }
     </style>
 </head>
 <body>
     <h1>박하람</h1>
-    
     <h2>Art Feedback Session 1</h2>
     <div class="gallery" id="gallery1"></div>
     
     <h2>Art Feedback Session 2</h2>
     <div class="gallery" id="gallery2"></div>
     
+    <div class="lightbox" id="lightbox">
+        <img id="lightbox-img" src="" alt="Expanded View" style="display: none;">
+        <video id="lightbox-video" controls style="display: none;"></video>
+    </div>
+
     <script>
         const imageList1 = ["00.mp4", "01.mp4", "02.mp4", "03.mp4", "04.png", "05.png"];
         const imageList2 = ["00.png", "01.png", "02.gif", "03.gif", "04.png", "05.png", "06.mp4"];
         
         const gallery1 = document.getElementById("gallery1");
         const gallery2 = document.getElementById("gallery2");
+        const lightbox = document.getElementById("lightbox");
+        const lightboxImg = document.getElementById("lightbox-img");
+        const lightboxVideo = document.getElementById("lightbox-video");
         
         function createMediaElement(src, isVideo) {
             if (isVideo) {
                 const videoElement = document.createElement("video");
                 videoElement.src = src;
                 videoElement.controls = true;
-                videoElement.classList.add("video-item");
-                
-                // 가로가 긴 영상인 경우
-                if (src.includes("02.mp4")) {
-                    videoElement.classList.add("wide");
-                }
+                videoElement.addEventListener("click", () => {
+                    lightboxImg.style.display = "none";
+                    lightboxVideo.src = videoElement.src;
+                    lightboxVideo.style.display = "block";
+                    lightbox.classList.add("visible");
+                });
                 return videoElement;
             } else {
                 const imgElement = document.createElement("img");
                 imgElement.src = src;
                 imgElement.alt = src;
+                imgElement.addEventListener("click", () => {
+                    lightboxVideo.style.display = "none";
+                    lightboxImg.src = imgElement.src;
+                    lightboxImg.style.display = "block";
+                    lightbox.classList.add("visible");
+                });
                 return imgElement;
             }
         }
         
-        imageList1.forEach(image => {
-            const isVideo = image.endsWith(".mp4");
-            const element = createMediaElement(`00_image/${image}`, isVideo);
-            gallery1.appendChild(element);
-        });
+        function populateGallery(images, gallery, folder) {
+            images.forEach(image => {
+                const isVideo = image.endsWith(".mp4");
+                const element = createMediaElement(`${folder}/${image}`, isVideo);
+                gallery.appendChild(element);
+            });
+        }
         
-        imageList2.forEach(image => {
-            const isVideo = image.endsWith(".mp4");
-            const element = createMediaElement(`01_image/${image}`, isVideo);
-            gallery2.appendChild(element);
+        populateGallery(imageList1, gallery1, "00_image");
+        populateGallery(imageList2, gallery2, "01_image");
+        
+        lightbox.addEventListener("click", () => {
+            lightbox.classList.remove("visible");
+            lightboxVideo.pause();
+            lightboxVideo.src = "";
         });
     </script>
 </body>
