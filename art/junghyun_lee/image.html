@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 10px;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            max-width: 1000px;
+            width: 100%;
+            padding: 20px;
+        }
+        .gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            object-fit: contain;
+        }
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+        @media (max-width: 600px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>이정현</h1>
+    
+    <h2>Art Feedback Session 1</h2>
+    <div class="gallery" id="gallery1"></div>
+    
+    <h2>Art Feedback Session 2</h2>
+    <div class="gallery" id="gallery2"></div>
+    
+    <script>
+        const imageList1 = ["00.png", "01.png", "02.png", "03.png", "04.png", "05.png", "06.png", "07.png", "08.png", "09.png"];
+        const imageList2 = ["00.png", "01.png", "02.png", "03.png", "04.png", "05.png", "06.png", "07.png", "08.png"];
+        
+        const gallery1 = document.getElementById("gallery1");
+        const gallery2 = document.getElementById("gallery2");
+        
+        imageList1.forEach(image => {
+            const imgElement = document.createElement("img");
+            imgElement.src = `00_image/${image}`;
+            imgElement.alt = image;
+            gallery1.appendChild(imgElement);
+        });
+        
+        imageList2.forEach(image => {
+            const imgElement = document.createElement("img");
+            imgElement.src = `01_image/${image}`;
+            imgElement.alt = image;
+            gallery2.appendChild(imgElement);
+        });
+    </script>
+</body>
+</html>
