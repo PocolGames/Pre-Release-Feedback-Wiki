@@ -5,82 +5,205 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pre-Release Feedback Wiki</title>
     <style>
+        /* 기본 스타일 */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        /* 네비게이션 바 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #1d1d1f;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #0071e3;
+        }
+
+        /* 메인 컨테이너 */
         .container {
             max-width: 900px;
-            margin: auto;
-            background: white;
+            margin: 100px auto 50px auto;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        h1, h2, h3 {
-            color: #343a40;
-        }
-        h2 {
-            border-bottom: 2px solid #dee2e6;
-            padding-bottom: 5px;
-            margin-top: 20px;
-        }
-        h3 {
-            margin-top: 15px;
-        }
-        ul {
-            line-height: 1.6;
-            padding-left: 20px;
-        }
-        .toc {
-            background: #e9ecef;
-            padding: 15px;
-            border-radius: 5px;
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             margin-bottom: 20px;
         }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            margin-top: 40px;
+            padding-bottom: 5px;
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 0px;
+/*            margin-top: 20px;*/
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h4 {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            margin-top: 10px;
+        }
+
+        ul {
+/*            line-height: 1.8;*/
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        /* 목차 스타일 */
+        .toc {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+/*            margin-bottom: 20px;*/
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
         .toc a {
             display: block;
             text-decoration: none;
-            color: #007bff;
-            margin: 5px 0;
+            color: #0071e3;
+/*            margin: 5px 0;*/
+            font-size: 16px;
+            font-weight: 500;
         }
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-            .container {
-                padding: 15px;
-            }
-            .toc {
-                padding: 10px;
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        /* 피드백 카드 */
+        .feedback {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease-in-out forwards;
+            margin-top: 10px;
+        }
+
+        .feedback:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        /*버튼*/
+        .feedback a { 
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 15px;
+            background: #0071e3;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .feedback a:hover {
+            background: #005bb5;
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
+
+        #table {
+            margin-bottom: 10px;
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>2025년도 1분기 피드백</h1>
-        
-        <div class="toc">
-            <h3>목차</h3>
-            <a href="#문초아">문초아</a>
-            <a href="#박철민">박철민</a>
-            <a href="#박하람">박하람</a>
-            <a href="#이정현">이정현</a>
-            <a href="#이현우">이현우</a>
-            <a href="#정다운">정다운</a>
-            <a href="#곽민성">곽민성</a>
-            <a href="#신성현">신성현</a>
-            <a href="#조현성">조현성</a>
-            <a href="#임은섭">임은섭</a>
-        </div>
-        
-        <h2 id="designer">디자이너</h2>
-        
+
+<!-- 네비게이션 바 -->
+<nav>
+    <a href="#designer">디자이너</a>
+    <a href="#programmer">프로그래머</a>
+</nav>
+
+<!-- 메인 컨텐츠 -->
+<div class="container">
+    <h1>2025년도 1분기 피드백</h1>
+
+    <!-- 목차 -->
+    <div class="toc">
+        <h3 id ="table">목차</h3>
+        <a href="#문초아"><li>문초아</li></a>
+        <a href="#박철민"><li>박철민</li></a>
+        <a href="#박하람"><li>박하람</li></a>
+        <a href="#이정현"><li>이정현</li></a>
+        <a href="#이현우"><li>이현우</li></a>
+        <a href="#정다운"><li>정다운</li></a>
+        <a href="#곽민성"><li>곽민성</li></a>
+        <a href="#신성현"><li>신성현</li></a>
+        <a href="#조현성"><li>조현성</li></a>
+        <a href="#임은섭"><li>임은섭</li></a>
+    </div>
+
+    <h2 id="designer">디자이너</h2>
+
+    <div class="feedback">
         <h3 id="문초아">문초아</h3>
-        <a href="art/choa_moon/image.html">이미지로 이동</a>
         <h4>Art Feedback Session 1</h4>
         <ul>
             <li>2주차에 비해 1주차의 작업량이 적어 아쉬움이 남는다.</li>
@@ -96,9 +219,11 @@
             <li>플랫한 대화창 UI의 경우, Unity에서는 해상도나 사용되는 공간에 따라 크기를 조절할 수 있는 시스템이 존재하므로, 동일한 패턴을 가진 UI는 하나만 제작해도 무방하다.</li>
             <li>대화창 UI는 체력바 UI와 마찬가지로 배경 이미지와 테두리를 분리하여 제작하는 경우가 있다. 이때 패널의 투명도는 Unity 내에서 조절할 수 있다.</li>
         </ul>
-        
+        <a href="art/choa_moon/image.html">이미지로 이동</a>
+    </div>
+
+    <div class="feedback">
         <h3 id="박철민">박철민</h3>
-        <a href="art/cheolmin_park/image.html">이미지로 이동</a>
         <h4>Art Feedback Session 1</h4>
         <ul>
             <li>픽셀 작업이므로 정확한 작업 시간 측정이 어렵다.</li>
@@ -109,9 +234,11 @@
         <ul>
             <li>타일맵 제작의 완성도는 높은 편이지만, 타일 간 연결 부분에서 다소 어색한 부분이 보인다.</li>
         </ul>
-        
+        <a href="art/cheolmin_park/image.html">이미지로 이동</a>
+    </div>
+
+    <div class="feedback">
         <h3 id="박하람">박하람</h3>
-        <a href="art/haram_park/image.html">이미지로 이동</a>
         <h4>Art Feedback Session 1</h4>
         <ul>
             <li>게임 리소스 파일 제작에 집중해야 하지만, 다른 작업에 시간을 투자하는 모습이 보였다.</li>
@@ -120,9 +247,11 @@
         <ul>
             <li>캔버스 아틀라스 작업에서는 각각의 이미지가 네모난 영역으로 분리되어야 하지만, 일부가 서로의 영역을 침범하고 있다.</li>
         </ul>
-        
+        <a href="art/haram_park/image.html">이미지로 이동</a>
+    </div>
+
+    <div class="feedback">
         <h3 id="이정현">이정현</h3>
-        <a href="art/junghyun_lee/image.html">이미지로 이동</a>
         <h4>Art Feedback Session 1</h4>
         <ul>
             <li>이미지 분리를 할 때 레이어만 나눠서 보내 아쉬움이 있었다.</li>
@@ -137,9 +266,11 @@
             <li>바닥 타일의 경우, 좌우 끝맺음이 다소 아쉽다. 1픽셀에 투명도가 적용되어 있어 양옆을 살짝 잘라서 인게임에 적용해야 한다. 다행히 자연스럽게 적용되었지만, 디자이너가 의도한 그림과 다르게 보일 수 있으므로 주의해야 한다.</li>
             <li>체력바 UI는 세 부분으로 나뉘며, 배경, 테두리, 체력바로 구성된다. 체력바의 배경을 추가로 그려야 한다. 이렇게 나누는 이유는 테두리를 활용하여 체력바 외곽선의 부자연스러움을 감추기 위함이다.</li>
         </ul>
-        
+        <a href="art/junghyun_lee/image.html">이미지로 이동</a>
+    </div>
+
+    <div class="feedback">
         <h3 id="이현우">이현우</h3>
-        <a href="art/hyunwoo_lee/image.html">이미지로 이동</a>
         <h4>Art Feedback Session 1</h4>
         <ul>
             <li>캔버스 분리가 필요하다.</li>
@@ -149,9 +280,11 @@
             <li>캔버스를 과도하게 분리했다. 비슷한 유형의 요소들은 하나의 캔버스로 합치는 것이 중요하다.</li>
             <li>타일 캔버스의 경우, 이미지에 비해 여백이 너무 많다.</li>
         </ul>
-        
+        <a href="art/hyunwoo_lee/image.html">이미지로 이동</a>
+    </div>
+
+    <div class="feedback">
         <h3 id="정다운">정다운</h3>
-        <a href="art/daun_jeong/image.html">이미지로 이동</a>
         <h4>Art Feedback Session 1</h4>
         <ul>
             <li>게임 리소스 파일로 적용하기 위해 더 많은 이미지 분리가 필요해 보인다.</li>
@@ -164,9 +297,12 @@
             <li>반복되는 UI 이미지는 좌우 반전 역시 Unity 내에서 해결할 수 있으므로, 추가적으로 캔버스에 포함할 필요가 없다.</li>
             <li>바닥 타일 이미지를 보면, 땅과 잡초를 분리한 이미지와 합쳐놓은 이미지를 같은 캔버스에 구성한 것을 볼 수 있다. 합쳐놓은 이미지에서는 잡초 이미지 좌우에 빈 공간이 있었는데, 이는 디자이너가 의도한 요소로 보인다. 하지만 땅과 잡초를 분리하여 캔버스를 구성했을 경우, 이 빈 공간에 대한 정보를 Unity 개발자에게 따로 전달하지 않으면 게임에서 그대로 적용하기 어려울 수 있으며, 이는 추가적인 의사소통이 필요하다. 따라서 이러한 경우에는 개별적인 캔버스로 구성하는 것도 괜찮다.</li>
         </ul>
-        
-        <h2 id="programmer">프로그래머</h2>
-        
+        <a href="art/daun_jeong/image.html">이미지로 이동</a>
+    </div>
+
+    <h2 id="programmer">프로그래머</h2>
+    
+    <div class="feedback">
         <h3 id="곽민성">곽민성</h3>
         <h4>Code Feedback Session 2</h4>
         <ul>
@@ -174,7 +310,11 @@
             <li>동일한 스크립트 이름이 존재할 경우 컴파일 시 오류가 발생할 수 있다.</li>
             <li>스크립트 파일명은 고유해야 한다.</li>
         </ul>
-        
+        <a>이미지로 이동</a>
+        <!-- <a href="art//image.html">이미지로 이동</a> -->
+    </div>
+
+    <div class="feedback">
         <h3 id="신성현">신성현</h3>
         <h4>Code Feedback Session 2</h4>
         <ul>
@@ -188,9 +328,12 @@
             <li><code>Text Asset</code>을 이용한 <code>Split()</code> 방식은 다국어화를 진행할 경우 매우 복잡해지고 문제가 발생할 가능성이 크다.</li>
             <li>대화 기능의 경우 다국어 지원이 필요하기 때문에, Unity의 <code>Localization Package Manager</code>를 사용하는 것이 더 적절하다.</li>
             <li><code>GameObject.Find("QuestManager").GetComponent<QuestManager>().ReadQuestFile();</code>에서 <code>Find()</code> 함수는 성능이 매우 좋지 않다.</li>
-
         </ul>
-        
+        <a>이미지로 이동</a>
+        <!-- <a href="art//image.html">이미지로 이동</a> -->
+    </div>
+
+    <div class="feedback">
         <h3 id="조현성">조현성</h3>
         <h4>Code Feedback Session 2</h4>
         <ul>
@@ -198,7 +341,11 @@
             <li>다른 부원들과는 다른 접근 방식으로 개발을 진행했다.</li>
             <li>카메라 움직임 또한 잘 구현되었다.</li>
         </ul>
-        
+        <a>이미지로 이동</a>
+        <!-- <a href="art//image.html">이미지로 이동</a> -->
+    </div>
+
+    <div class="feedback">
         <h3 id="임은섭">임은섭</h3>
         <h4>Code Feedback Session 2</h4>
         <ul>
@@ -207,6 +354,11 @@
             <li>현재 사용 중인 기기가 지원하는 해상도를 검색할 수 있는 코드가 존재하며, 이를 활용하여 개발하는 것을 추천한다.</li>
             <li>일반적으로 해상도 선택 UI는 드롭다운 패널을 사용하여 설정하는 방식을 많이 채택하므로, 이 기능을 구현해보는 것도 좋다.</li>
         </ul>
+        <a>이미지로 이동</a>
+        <!-- <a href="art//image.html">이미지로 이동</a> -->
     </div>
+
+</div>
+
 </body>
 </html>
