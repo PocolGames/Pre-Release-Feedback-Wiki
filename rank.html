@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pre-Release Rank</title>
-    <link rel="stylesheet" href="maincss.css">
-    <link rel="stylesheet" href="nav.css">
-    <link rel="stylesheet" href="rank.css">
+    <link rel="stylesheet" href="cs/maincss.css">
+    <link rel="stylesheet" href="cs/nav.css">
+    <link rel="stylesheet" href="cs/rank.css">
+    <link rel="stylesheet" href="cs/footer.css">
 </head>
 <body>
 
@@ -105,7 +106,7 @@
 
     <div class="feedback2">
         <div class="rank-line">
-            <span class="col-rank">3</span>
+            <span class="col-rank">4</span>
             <span class="col-name">박철민</span>
             <span class="col-score">0</span>
             <span class="col-score">3</span>
@@ -117,7 +118,7 @@
 
     <div class="feedback2">
         <div class="rank-line">
-            <span class="col-rank">4</span>
+            <span class="col-rank">5</span>
             <span class="col-name">문초아</span>
             <span class="col-score">0</span>
             <span class="col-score">2</span>
@@ -129,7 +130,7 @@
 
     <div class="feedback2">
         <div class="rank-line">
-            <span class="col-rank">5</span>
+            <span class="col-rank">6</span>
             <span class="col-name">박하람</span>
             <span class="col-score">0</span>
             <span class="col-score">1</span>
@@ -141,7 +142,7 @@
 
     <div class="feedback2">
         <div class="rank-line">
-            <span class="col-rank">6</span>
+            <span class="col-rank">7</span>
             <span class="col-name">이현우</span>
             <span class="col-score">0</span>
             <span class="col-score">2</span>
@@ -153,7 +154,7 @@
 
     <div class="feedback2">
         <div class="rank-line">
-            <span class="col-rank">6</span>
+            <span class="col-rank">7</span>
             <span class="col-name">박성빈</span>
             <span class="col-score">0</span>
             <span class="col-score">0</span>
@@ -165,7 +166,7 @@
 
     <div class="feedback2">
         <div class="rank-line">
-            <span class="col-rank">6</span>
+            <span class="col-rank">7</span>
             <span class="col-name">신성현</span>
             <span class="col-score">0</span>
             <span class="col-score">2</span>
@@ -177,7 +178,7 @@
 
     <div class="feedback2">
         <div class="rank-line">
-            <span class="col-rank">7</span>
+            <span class="col-rank">8</span>
             <span class="col-name">전병근</span>
             <span class="col-score">0</span>
             <span class="col-score">0</span>
@@ -189,7 +190,7 @@
 
     <div class="feedback2">
         <div class="rank-line">
-            <span class="col-rank">8</span>
+            <span class="col-rank">9</span>
             <span class="col-name">신대균</span>
             <span class="col-score">0</span>
             <span class="col-score">0</span>
@@ -201,7 +202,7 @@
 
     <div class="feedback2">
         <div class="rank-line">
-            <span class="col-rank">8</span>
+            <span class="col-rank">9</span>
             <span class="col-name">차우석</span>
             <span class="col-score">0</span>
             <span class="col-score">0</span>
@@ -213,7 +214,7 @@
 
     <div class="feedback2">
         <div class="rank-line">
-            <span class="col-rank">8</span>
+            <span class="col-rank">9</span>
             <span class="col-name">김란</span>
             <span class="col-score">0</span>
             <span class="col-score">0</span>
@@ -223,6 +224,27 @@
         </div>
     </div>
 </div>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-name">&copy; 2025 이은수 | Pre-Release Project. All rights reserved.</div>
+        <div class="footer-contact">
+            <span class="phone">📞 010-1234-5678</span>
+            <span class="dot">•</span>
+            <a class="email" href="mailto:contact@example.com">contact@example.com</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.feedback2');
+            cards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`; // 순차 지연 설정
+            card.classList.add('animate'); // 애니메이션 활성화
+        });
+    });
+</script>
 
 </body>
 </html>
