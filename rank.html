@@ -48,35 +48,47 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const rawData = [
-            { name: '정다운', scores: [2, 2, 0, 0] },
-            { name: '이정현', scores: [1, 2, 1, 0] },
-            { name: '조현성', scores: [1, 2, 1, 0] },
-            { name: '임은섭', scores: [0, 4, 0, 0] },
             { name: '강우성', scores: [0, 4, 0, 0] },
             { name: '곽민성', scores: [1, 1, 2, 0] },
-            { name: '박철민', scores: [0, 3, 1, 0] },
+            { name: '김란', scores: [0, 0, 0, 0] },
             { name: '문초아', scores: [0, 2, 2, 0] },
-            { name: '박하람', scores: [0, 1, 3, 0] },
-            { name: '이현우', scores: [0, 2, 1, 1] },
             { name: '박성빈', scores: [0, 0, 4, 0] },
+            { name: '박하람', scores: [0, 1, 3, 0] },
+            { name: '박철민', scores: [0, 3, 1, 0] },
+            { name: '이정현', scores: [1, 2, 1, 0] },
+            { name: '이현우', scores: [0, 2, 1, 1] },
+            { name: '정다운', scores: [2, 2, 0, 0] },
+            { name: '조현성', scores: [1, 2, 1, 0] },
+            { name: '임은섭', scores: [0, 4, 0, 0] },
             { name: '신성현', scores: [0, 2, 0, 0] },
-            { name: '전병근', scores: [0, 0, 0, 2] },
             { name: '신대균', scores: [0, 0, 0, 0] },
             { name: '차우석', scores: [0, 0, 0, 0] },
-            { name: '김란', scores: [0, 0, 0, 0] },
+            { name: '전병근', scores: [0, 0, 0, 2] },
         ];
     
         // 총점 및 정렬 기준 추가
         const processedData = rawData.map(entry => {
             const [top, good, tryAgain, ne] = entry.scores;
             const total = top * 3 + good * 2 + tryAgain * 1 + ne * -1;
-            return { ...entry, total, top };
+            return { ...entry, total, top, good, tryAgain, ne };
         });
     
-        // total -> top 기준 정렬
+        // 총점, top, good, tryAgain, ne 기준 정렬
         processedData.sort((a, b) => {
+            // 1. total 내림차순
             if (b.total !== a.total) return b.total - a.total;
-            return b.top - a.top;
+    
+            // 2. top 내림차순
+            if (b.top !== a.top) return b.top - a.top;
+    
+            // 3. good 내림차순
+            if (b.good !== a.good) return b.good - a.good;
+    
+            // 4. tryAgain 내림차순
+            if (b.tryAgain !== a.tryAgain) return b.tryAgain - a.tryAgain;
+    
+            // 5. ne 내림차순
+            return b.ne - a.ne;
         });
     
         // 순위 계산 (동점 처리 포함)
@@ -85,7 +97,7 @@
         let prev = null;
     
         processedData.forEach((entry, i) => {
-            if (prev && entry.total === prev.total && entry.top === prev.top) {
+            if (prev && entry.total === prev.total && entry.top === prev.top && entry.good === prev.good && entry.tryAgain === prev.tryAgain && entry.ne === prev.ne) {
                 entry.rank = currentRank;
                 sameRankCount++;
             } else {
@@ -133,6 +145,7 @@
             container.appendChild(div);
         });
     });
+
 </script>
 
 
