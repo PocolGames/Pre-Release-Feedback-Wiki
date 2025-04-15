@@ -87,6 +87,11 @@ ul {
     padding-left: 20px;
     padding-right: 20px;
 }
+p {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 /* 목차 스타일 */
 .toc {
     background: #e9ecef;
