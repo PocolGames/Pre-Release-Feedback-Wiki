@@ -47,62 +47,88 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const data = [
-            { rank: 1, name: '정다운', scores: [2, 2, 0, 0] },
-            { rank: 2, name: '이정현', scores: [1, 2, 1, 0] },
-            { rank: 2, name: '조현성', scores: [1, 2, 1, 0] },
-            { rank: 2, name: '임은섭', scores: [0, 4, 0, 0] },
-            { rank: 2, name: '강우성', scores: [0, 4, 0, 0] },
-            { rank: 3, name: '곽민성', scores: [1, 1, 2, 0] },
-            { rank: 4, name: '박철민', scores: [0, 3, 1, 0] },
-            { rank: 5, name: '문초아', scores: [0, 2, 2, 0] },
-            { rank: 6, name: '박하람', scores: [0, 1, 3, 0] },
-            { rank: 7, name: '이현우', scores: [0, 2, 1, 1] },
-            { rank: 7, name: '박성빈', scores: [0, 0, 4, 0] },
-            { rank: 7, name: '신성현', scores: [0, 2, 0, 0] },
-            { rank: 8, name: '전병근', scores: [0, 0, 0, 2] },
-            { rank: 9, name: '신대균', scores: [0, 0, 0, 0] },
-            { rank: 9, name: '차우석', scores: [0, 0, 0, 0] },
-            { rank: 9, name: '김란', scores: [0, 0, 0, 0] },
+        const rawData = [
+            { name: '정다운', scores: [2, 2, 0, 0] },
+            { name: '이정현', scores: [1, 2, 1, 0] },
+            { name: '조현성', scores: [1, 2, 1, 0] },
+            { name: '임은섭', scores: [0, 4, 0, 0] },
+            { name: '강우성', scores: [0, 4, 0, 0] },
+            { name: '곽민성', scores: [1, 1, 2, 0] },
+            { name: '박철민', scores: [0, 3, 1, 0] },
+            { name: '문초아', scores: [0, 2, 2, 0] },
+            { name: '박하람', scores: [0, 1, 3, 0] },
+            { name: '이현우', scores: [0, 2, 1, 1] },
+            { name: '박성빈', scores: [0, 0, 4, 0] },
+            { name: '신성현', scores: [0, 2, 0, 0] },
+            { name: '전병근', scores: [0, 0, 0, 2] },
+            { name: '신대균', scores: [0, 0, 0, 0] },
+            { name: '차우석', scores: [0, 0, 0, 0] },
+            { name: '김란', scores: [0, 0, 0, 0] },
         ];
-
+    
+        // 총점 및 정렬 기준 추가
+        const processedData = rawData.map(entry => {
+            const [top, good, tryAgain, ne] = entry.scores;
+            const total = top * 3 + good * 2 + tryAgain * 1 + ne * -1;
+            return { ...entry, total, top };
+        });
+    
+        // total -> top 기준 정렬
+        processedData.sort((a, b) => {
+            if (b.total !== a.total) return b.total - a.total;
+            return b.top - a.top;
+        });
+    
+        // 순위 계산 (동점 처리 포함)
+        let currentRank = 1;
+        let sameRankCount = 0;
+        let prev = null;
+    
+        processedData.forEach((entry, i) => {
+            if (prev && entry.total === prev.total && entry.top === prev.top) {
+                entry.rank = currentRank;
+                sameRankCount++;
+            } else {
+                currentRank = i + 1;
+                entry.rank = currentRank;
+                sameRankCount = 1;
+            }
+            prev = entry;
+        });
+    
+        // DOM에 출력
         const container = document.getElementById('ranking-container');
-
-        data.forEach((entry, index) => {
+        processedData.forEach((entry, index) => {
             const div = document.createElement('div');
             div.className = 'feedback2';
             div.style.animationDelay = `${index * 0.1}s`;
             div.classList.add('animate');
-
+    
             const line = document.createElement('div');
             line.className = 'rank-line';
-
+    
             const spanRank = document.createElement('span');
             spanRank.className = 'col-rank';
             spanRank.textContent = entry.rank;
             line.appendChild(spanRank);
-
+    
             const spanName = document.createElement('span');
             spanName.className = 'col-name';
             spanName.textContent = entry.name;
             line.appendChild(spanName);
-
-            // 각 점수 출력
+    
             entry.scores.forEach(score => {
                 const scoreSpan = document.createElement('span');
                 scoreSpan.className = 'col-score';
                 scoreSpan.textContent = score;
                 line.appendChild(scoreSpan);
             });
-
-            // Total 계산 및 출력
-            const [top, good, tryAgain, ne] = entry.scores;
-            const total = top * 3 + good * 2 + tryAgain * 1 + ne * -1;
+    
             const totalSpan = document.createElement('span');
             totalSpan.className = 'col-score';
-            totalSpan.textContent = total;
+            totalSpan.textContent = entry.total;
             line.appendChild(totalSpan);
-
+    
             div.appendChild(line);
             container.appendChild(div);
         });
