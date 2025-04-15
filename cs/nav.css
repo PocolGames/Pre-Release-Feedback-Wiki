@@ -4,16 +4,34 @@ nav {
     top: 0;
     left: 0;
     width: 100%;
+    height: 60px;
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(10px);
-    padding: 15px 0;
     display: flex;
-    justify-content: center;
-    align-items: center;  /* 세로 중앙 정렬 */
-    gap: 20px;  /* 버튼 간 간격 */
+    justify-content: center; /* 중앙 메뉴를 기준으로 배치 */
+    align-items: center;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-    z-index: 1000;        
+    z-index: 1000;
 }
+
+/* 중앙 정렬되는 메뉴 */
+.nav-center {
+    display: flex;
+    gap: 20px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* 오른쪽 로그인 버튼 */
+.nav-right {
+    position: absolute;
+    right: 40px;
+    display: flex;
+    align-items: center;
+}
+
+/* 공통 네비게이션 링크 스타일 */
 nav a {
     text-decoration: none;
     color: #1d1d1f;
@@ -23,7 +41,22 @@ nav a {
     transition: color 0.3s, background 0.3s;
     border-radius: 5px;
 }
+
 nav a:hover {
     color: #0071e3;
     background: rgba(0, 113, 227, 0.1);
+}
+
+/* 로그인 버튼 스타일 */
+.login-button {
+    background-color: #0071e3;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.login-button:hover {
+    background-color: #005bb5;
 }
