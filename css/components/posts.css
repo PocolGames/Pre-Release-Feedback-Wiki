@@ -1,0 +1,75 @@
+/* 포스트 스타일 (SNS 스타일) */
+.post {
+    background-color: var(--post-bg);
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid var(--post-border);
+}
+
+.post-avatar {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    margin-right: 10px;
+}
+
+.post-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.post-date {
+    font-size: 0.85rem;
+    color: #636e72;
+}
+
+.post-content {
+    padding: 15px;
+}
+
+.post-content p {
+    margin-bottom: 10px;
+}
+
+.post-content p:last-child {
+    margin-bottom: 0;
+}
+
+.post-footer {
+    padding: 10px 15px;
+    display: flex;
+    border-top: 1px solid var(--post-border);
+    font-size: 0.9rem;
+}
+
+.post-reaction, .post-comments, .post-share {
+    margin-right: 20px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.post-reaction:hover {
+    color: var(--like-color);
+}
+
+.post-comments:hover {
+    color: var(--comment-color);
+}
+
+.post-share:hover {
+    color: var(--share-color);
+}

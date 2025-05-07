@@ -1,0 +1,94 @@
+/* 동아리 소개 스타일 */
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.about-card {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid var(--card-accent);
+}
+
+.about-card h3 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--card-accent);
+}
+
+.about-card p {
+    margin-bottom: 10px;
+}
+
+.about-card ul {
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+.about-card li {
+    margin-bottom: 5px;
+}
+
+/* 지원 방법 스타일 */
+.apply-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.apply-card {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.apply-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.apply-card h3 i {
+    margin-right: 10px;
+    color: var(--accent-color);
+}
+
+.apply-card p {
+    margin-bottom: 10px;
+}
+
+.apply-card ul {
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+.apply-card li {
+    margin-bottom: 5px;
+}
+
+.chat-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #FEE500; /* Kakao Yellow */
+    color: #3C1E1E; /* Kakao Brown */
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.chat-link:hover {
+    background-color: #F6E14B;
+    transform: translateY(-2px);
+}
+
+.chat-link i {
+    margin-right: 5px;
+}

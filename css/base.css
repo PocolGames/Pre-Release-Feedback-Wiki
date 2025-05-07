@@ -1,0 +1,80 @@
+/* 기본 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 색상 변수 설정 (색상 팔레트에서 가져온 색상) */
+:root {
+    /* 주요 색상 */
+    --primary-color: #0984e3;
+    --secondary-color: #6c5ce7;
+    --accent-color: #00b894;
+    
+    /* 배경 색상 */
+    --bg-light: #dfe6e9;
+    --bg-dark: #2d3436;
+    
+    /* 텍스트 색상 */
+    --text-dark: #2d3436;
+    --text-light: #dfe6e9;
+    
+    /* 포스트 색상 */
+    --post-bg: #fff;
+    --post-border: #b2bec3;
+    
+    /* 액션 색상 */
+    --like-color: #fd79a8;
+    --comment-color: #74b9ff;
+    --share-color: #55efc4;
+    
+    /* 카드 색상 */
+    --card-bg: #fff;
+    --card-accent: #a29bfe;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+    line-height: 1.6;
+}
+
+/* 로딩 인디케이터 스타일 */
+.loading-indicator,
+.loading-posts,
+.loading-projects,
+.loading-tabs,
+.loading-feedback {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.loading-indicator i,
+.loading-posts i,
+.loading-projects i,
+.loading-tabs i,
+.loading-feedback i {
+    margin-right: 10px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 에러 메시지 스타일 */
+.error-message {
+    padding: 20px;
+    text-align: center;
+    background-color: #ffeaa7;
+    color: #d63031;
+    border-radius: 10px;
+    margin: 20px 0;
+}

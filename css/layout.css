@@ -1,0 +1,30 @@
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* 메인 콘텐츠 영역 */
+.content {
+    flex: 1;
+    margin-left: 250px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto 0 250px;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* 섹션 표시/숨김 */
+.active-section {
+    display: block;
+}
+
+.hidden-section {
+    display: none;
+}

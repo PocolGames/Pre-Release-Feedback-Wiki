@@ -1,0 +1,17 @@
+/* 메인 CSS 파일 - 모든 스타일 가져오기 */
+
+/* 기본 스타일 */
+@import 'base.css';
+
+/* 레이아웃 */
+@import 'layout.css';
+
+/* 컴포넌트 */
+@import 'components/navbar.css';
+@import 'components/posts.css';
+@import 'components/cards.css';
+@import 'components/gallery.css';
+@import 'components/feedback.css';
+
+/* 반응형 스타일 */
+@import 'responsive.css';
