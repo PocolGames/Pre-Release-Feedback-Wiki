@@ -80,16 +80,18 @@ function resetFeedbackPage() {
         tab.classList.remove('active');
     });
     
-    // 모든 피드백 컨텐츠 숨기기
+    // 모든 피드백 컨텐츠 완전히 제거
     document.querySelectorAll('.member-feedback').forEach(feedback => {
         feedback.classList.remove('active');
         feedback.style.display = 'none';
+        feedback.style.opacity = '0';
     });
     
     // 초기 메시지 표시
     const initialMessage = document.querySelector('.initial-message');
     if (initialMessage) {
         initialMessage.style.display = 'block';
+        initialMessage.style.opacity = '1';
     }
 }
 
@@ -416,6 +418,15 @@ function setupMemberTabs() {
     
     memberTabs.forEach(tab => {
         tab.addEventListener('click', function() {
+            // 멤버 ID 가져오기
+            const memberId = this.getAttribute('data-member');
+            const selectedFeedback = document.getElementById(memberId + '-feedback');
+            
+            // 현재 탭이 이미 활성화되어 있는지 확인
+            if (this.classList.contains('active')) {
+                return; // 이미 활성화된 탭이면 더 이상 실행하지 않음
+            }
+            
             // 모든 탭에서 active 클래스 제거
             document.querySelectorAll('.member-tab').forEach(t => {
                 t.classList.remove('active');
@@ -424,15 +435,13 @@ function setupMemberTabs() {
             // 클릭한 탭에 active 클래스 추가
             this.classList.add('active');
             
-            // 멤버 ID 가져오기
-            const memberId = this.getAttribute('data-member');
-            
-            // 초기 메시지 숨기기
+            // 초기 메시지 완전히 제거
             if (initialMessage) {
                 initialMessage.style.display = 'none';
+                initialMessage.style.opacity = '0';
             }
             
-            // 모든 피드백 숨기기 (즉시)
+            // 모든 피드백 완전히 제거 (즉시)
             memberFeedbacks.forEach(feedback => {
                 feedback.classList.remove('active');
                 feedback.style.display = 'none';
@@ -440,9 +449,18 @@ function setupMemberTabs() {
             });
             
             // 선택한 멤버의 피드백만 표시 (지연 적용)
-            setTimeout(() => {
-                const selectedFeedback = document.getElementById(memberId + '-feedback');
-                if (selectedFeedback) {
+            if (selectedFeedback) {
+                setTimeout(() => {
+                    // 다른 모든 피드백을 완전히 제거
+                    document.querySelectorAll('.member-feedback').forEach(feedback => {
+                        if (feedback.id !== selectedFeedback.id) {
+                            feedback.classList.remove('active');
+                            feedback.style.display = 'none';
+                            feedback.style.opacity = '0';
+                        }
+                    });
+                    
+                    // 선택한 피드백 표시
                     selectedFeedback.style.display = 'block';
                     
                     // 레이아웃 재계산 강제
@@ -451,8 +469,8 @@ function setupMemberTabs() {
                     // 표시 애니메이션 시작
                     selectedFeedback.classList.add('active');
                     selectedFeedback.style.opacity = '1';
-                }
-            }, 50);
+                }, 50);
+            }
         });
     });
 }
