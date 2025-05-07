@@ -16,6 +16,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 제한된 콘텐츠 처리
     handleRestrictedContent();
+    
+    // 해시 변경 이벤트 리스너
+    window.addEventListener('hashchange', function() {
+        // 페이지 변경 시 제한된 콘텐츠 다시 처리
+        setTimeout(function() {
+            handleRestrictedContent();
+        }, 100);
+    });
 });
 
 // 로그인 상태 확인
@@ -145,6 +153,16 @@ function handleRestrictedContent() {
     // 갤러리와 피드백 섹션 요소
     const gallerySection = document.getElementById('gallery');
     const feedbackSection = document.getElementById('feedback');
+    const loginSection = document.getElementById('login');
+    
+    // 로그인 페이지에 표시되는 오버레이 제거
+    const loginOverlays = document.querySelectorAll('.login-overlay');
+    loginOverlays.forEach(overlay => {
+        // 현재 페이지가 로그인이면 모든 오버레이 제거
+        if (window.location.hash.substring(1) === 'login') {
+            overlay.remove();
+        }
+    });
     
     if (gallerySection && feedbackSection) {
         if (isLoggedIn) {
@@ -177,6 +195,21 @@ function applyRestriction(element) {
         const existingOverlay = document.querySelector(`#${element.id}-overlay`);
         if (existingOverlay) {
             existingOverlay.remove();
+        }
+        
+        // 현재 페이지가 로그인 페이지인지 상태 확인
+        if (window.location.hash.substring(1) === 'login') {
+            return; // 로그인 페이지에서는 오버레이 추가하지 않음
+        }
+        
+        // 피드백 페이지의 중복 방지
+        if (element.id === 'feedback') {
+            const galleryOverlay = document.querySelector('#gallery-overlay');
+            if (galleryOverlay && window.location.hash.substring(1) === 'feedback') {
+                // 갤러리 오버레이가 있고 피드백 페이지에 있는 경우
+                // 오버레이 하나만 표시
+                return;
+            }
         }
         
         // 오버레이 생성
