@@ -458,7 +458,7 @@ body {
 }
 
 .member-category {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .member-category h3 {
@@ -469,30 +469,79 @@ body {
     margin-bottom: 10px;
 }
 
-.member-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    overflow-x: auto;
-    padding: 0 10px 10px;
+/* 드롭다운 스타일 */
+.member-dropdown {
+    position: relative;
+    margin: 0 15px 15px;
+}
+
+.dropdown-btn {
+    width: 100%;
     background-color: #f8f9fa;
-}
-
-.member-tab {
-    background-color: transparent;
     color: var(--text-dark);
-    border: none;
-    padding: 8px 15px;
-    margin: 5px;
-    cursor: pointer;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
     border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     transition: all 0.3s;
-    border: 1px solid transparent;
 }
 
-.member-tab.active, .member-tab:hover {
+.dropdown-btn:hover {
+    background-color: #e9ecef;
+}
+
+.dropdown-btn i {
+    transition: transform 0.3s;
+}
+
+.dropdown-btn.active i {
+    transform: rotate(180deg);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 100%;
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    z-index: 1;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+.member-option {
+    padding: 12px 15px;
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.member-option:last-child {
+    border-bottom: none;
+}
+
+.member-option:hover {
+    background-color: #f1f1f1;
+}
+
+.member-option.active {
     background-color: var(--primary-color);
     color: white;
-    border-color: var(--primary-color);
 }
 
 .feedback-container {

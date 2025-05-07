@@ -75,9 +75,20 @@ function showPage(pageId) {
 
 // 피드백 페이지 초기화
 function resetFeedbackPage() {
-    // 모든 탭에서 active 클래스 제거
-    document.querySelectorAll('.member-tab').forEach(tab => {
-        tab.classList.remove('active');
+    // 드롭다운 버튼 초기화
+    document.querySelectorAll('.dropdown-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.querySelector('.dropdown-text').textContent = '멤버 선택';
+    });
+    
+    // 드롭다운 컨텐츠 닫기
+    document.querySelectorAll('.dropdown-content').forEach(content => {
+        content.classList.remove('show');
+    });
+    
+    // 메버 옵션 초기화
+    document.querySelectorAll('.member-option').forEach(option => {
+        option.classList.remove('active');
     });
     
     // 모든 피드백 컨텐츠 완전히 제거
@@ -211,9 +222,9 @@ function loadProjects(data) {
 
 // 멤버 로드
 function loadMembers(data) {
-    // 프로그래머 탭
-    const programmerTabs = document.querySelector('.programmer-tabs');
-    if (programmerTabs) {
+    // 프로그래머 드롭다운
+    const programmerDropdown = document.querySelector('.programmer-dropdown-content');
+    if (programmerDropdown) {
         let programmerHTML = '';
         
         // 프로그래머 필터링
@@ -221,16 +232,16 @@ function loadMembers(data) {
         
         programmers.forEach((member, index) => {
             programmerHTML += `
-                <button class="member-tab" data-member="${member.id}">${member.name}</button>
+                <button class="member-option" data-member="${member.id}">${member.name}</button>
             `;
         });
         
-        programmerTabs.innerHTML = programmerHTML;
+        programmerDropdown.innerHTML = programmerHTML;
     }
     
-    // 디자이너 탭
-    const designerTabs = document.querySelector('.designer-tabs');
-    if (designerTabs) {
+    // 디자이너 드롭다운
+    const designerDropdown = document.querySelector('.designer-dropdown-content');
+    if (designerDropdown) {
         let designerHTML = '';
         
         // 디자이너 필터링
@@ -238,15 +249,15 @@ function loadMembers(data) {
         
         designers.forEach((member, index) => {
             designerHTML += `
-                <button class="member-tab" data-member="${member.id}">${member.name}</button>
+                <button class="member-option" data-member="${member.id}">${member.name}</button>
             `;
         });
         
-        designerTabs.innerHTML = designerHTML;
+        designerDropdown.innerHTML = designerHTML;
     }
     
     // 이벤트 리스너 설정
-    setupMemberTabs();
+    setupMemberDropdowns();
 }
 
 // 피드백 로드
@@ -410,30 +421,69 @@ function showProjectDetails(projectId, projectsData) {
     });
 }
 
-// 멤버 탭 설정
-function setupMemberTabs() {
-    const memberTabs = document.querySelectorAll('.member-tab');
+// 멤버 드롭다운 설정
+function setupMemberDropdowns() {
+    // 드롭다운 버튼 클릭 이벤트
+    const dropdownBtns = document.querySelectorAll('.dropdown-btn');
+    const dropdownContents = document.querySelectorAll('.dropdown-content');
+    const memberOptions = document.querySelectorAll('.member-option');
     const memberFeedbacks = document.querySelectorAll('.member-feedback');
     const initialMessage = document.querySelector('.initial-message');
     
-    memberTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
+    // 드롭다운 버튼 클릭 시 드롭다운 컨텐츠 표시/숨기기
+    dropdownBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const dropdownContent = this.nextElementSibling;
+            
+            // 다른 모든 드롭다운 닫기
+            dropdownContents.forEach(content => {
+                if (content !== dropdownContent) {
+                    content.classList.remove('show');
+                    content.previousElementSibling.classList.remove('active');
+                }
+            });
+            
+            // 클릭한 드롭다운 토글
+            this.classList.toggle('active');
+            dropdownContent.classList.toggle('show');
+        });
+    });
+    
+    // 외부 클릭 시 드롭다운 닫기
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.member-dropdown')) {
+            dropdownBtns.forEach(btn => btn.classList.remove('active'));
+            dropdownContents.forEach(content => content.classList.remove('show'));
+        }
+    });
+    
+    // 멤버 옵션 클릭 이벤트 설정
+    memberOptions.forEach(option => {
+        option.addEventListener('click', function() {
             // 멤버 ID 가져오기
             const memberId = this.getAttribute('data-member');
             const selectedFeedback = document.getElementById(memberId + '-feedback');
+            const dropdownBtn = this.closest('.dropdown-content').previousElementSibling;
             
-            // 현재 탭이 이미 활성화되어 있는지 확인
+            // 이미 선택된 옵션인지 확인
             if (this.classList.contains('active')) {
-                return; // 이미 활성화된 탭이면 더 이상 실행하지 않음
+                return; // 이미 활성화된 경우 완료
             }
             
-            // 모든 탭에서 active 클래스 제거
-            document.querySelectorAll('.member-tab').forEach(t => {
-                t.classList.remove('active');
+            // 모든 옵션에서 active 클래스 제거
+            this.closest('.dropdown-content').querySelectorAll('.member-option').forEach(op => {
+                op.classList.remove('active');
             });
             
-            // 클릭한 탭에 active 클래스 추가
+            // 클릭한 옵션에 active 클래스 추가
             this.classList.add('active');
+            
+            // 드롭다운 버튼 텍스트 변경
+            dropdownBtn.querySelector('.dropdown-text').textContent = this.textContent;
+            
+            // 드롭다운 닫기
+            this.closest('.dropdown-content').classList.remove('show');
+            dropdownBtn.classList.remove('active');
             
             // 초기 메시지 완전히 제거
             if (initialMessage) {
@@ -441,7 +491,7 @@ function setupMemberTabs() {
                 initialMessage.style.opacity = '0';
             }
             
-            // 모든 피드백 완전히 제거 (즉시)
+            // 모든 피드백 완전히 제거
             memberFeedbacks.forEach(feedback => {
                 feedback.classList.remove('active');
                 feedback.style.display = 'none';
@@ -451,7 +501,7 @@ function setupMemberTabs() {
             // 선택한 멤버의 피드백만 표시 (지연 적용)
             if (selectedFeedback) {
                 setTimeout(() => {
-                    // 다른 모든 피드백을 완전히 제거
+                    // 다른 모든 피드백 완전히 제거
                     document.querySelectorAll('.member-feedback').forEach(feedback => {
                         if (feedback.id !== selectedFeedback.id) {
                             feedback.classList.remove('active');
