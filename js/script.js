@@ -448,10 +448,10 @@ function setupMemberDropdowns() {
             
             // 드롭다운이 열릴 때 초기 메시지 숨기기
             if (dropdownContent.classList.contains('show')) {
-                initialMessage.style.display = 'none';
+                initialMessage.style.visibility = 'hidden';
             } else if (!document.querySelector('.member-feedback.active')) {
                 // 활성화된 피드백이 없을 때만 초기 메시지 다시 표시
-                initialMessage.style.display = 'block';
+                initialMessage.style.visibility = 'visible';
             }
         });
     });
@@ -512,7 +512,7 @@ function setupMemberDropdowns() {
             dropdownBtn.classList.remove('active');
             
             // 초기 메시지 완전히 제거 - 여기서 모든 처리
-            document.querySelector('.initial-message').style.display = 'none';
+            document.querySelector('.initial-message').style.visibility = 'hidden';
             
             // 모든 피드백 완전히 제거
             document.querySelectorAll('.member-feedback').forEach(feedback => {

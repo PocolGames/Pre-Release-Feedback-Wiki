@@ -63,6 +63,16 @@
         margin-left: 0;
         padding: 15px;
         padding-bottom: 80px; /* 하단 네비게이션 가리지 않게 여백 추가 */
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .initial-message {
+        min-height: 150px;
+    }
+    
+    .feedback-container {
+        min-height: 200px;
     }
     
     .gallery-grid {

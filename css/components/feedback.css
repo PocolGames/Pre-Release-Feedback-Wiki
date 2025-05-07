@@ -98,6 +98,7 @@
     padding: 0px;
     position: relative;
     min-height: 300px;
+    width: 100%;
 }
 
 .initial-message {
@@ -105,12 +106,14 @@
     padding: 50px 0;
     color: #636e72;
     font-size: 1.1rem;
-    position: absolute;
+    position: relative;
     width: 100%;
-    left: 0;
-    top: 0;
+    min-height: 200px;
     z-index: 5;
     background-color: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .member-feedback {
