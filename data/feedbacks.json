@@ -208,6 +208,30 @@
                 "작업 퀄리티를 낮추고 다양한 오브젝트를 그려보는 것을 추천한다.",
                 "캐릭터 애니메이션도 연습해 보는 것을 추천한다."
             ]
+        },
+        {
+            "id": "feedback19",
+            "memberId": "kangwoosung",
+            "title": "Code Feedback Session 3",
+            "date": "2025-05-07",
+            "content": [
+                "<code>NullReferenceException</code>오류가 발생하고 있습니다. 해당 오류는 객체가 null인 상태에서 접근하려고 할 때 발생합니다. 이 오류를 해결하기 위해서는 해당 객체가 null인지 확인하고, null이 아닐 경우에만 접근하도록 코드를 수정해야 합니다.",
+                "UI에서 <code>Text Component</code>는 현재는 절대 사용하지 않는 레거시 코드입니다. <code>TextMeshPro</code>를 사용하는 것이 좋습니다."
+            ]
+        },
+        {
+            "id": "feedback20",
+            "memberId": "shinsunghyun",
+            "title": "Code Feedback Session 3",
+            "date": "2025-05-07",
+            "content": [
+                "맵에 오브젝트를 미리 배치해둔 것을 볼 수가 있는데, 지금은 시간이 없어서 이런 방식을 채택했을 수도 있습니다.",
+                "최적화 방식에서 코드로 오브젝트를 배치하는 경우도 존재하기 때문에 고려해봤으면 좋겠습니다.",
+                "메서드 캡슐화는 잘 되어있습니다.",
+                "<code>GameManager</code> 스크립트에서 <code>Locate Materixes</code>변수에 <code>Transform</code>을 하나하나 캐싱한 것으로 보이는 데, 이러한 경우는 코드로 캐싱을 하는 편이 유지보수에 더 유리할 수 있습니다.",
+                "<code>string</code> 변수에 한글을 넣어서 <code>if</code>문을 사용한 것으로 보이는데, 이러한 경우는 <code>swtich</code>을 사용하거나 <code>enum</code>을 사용하는 것이 좋습니다.",
+                "<code>string</code>변수에 한글을 넣어서 사용하는 것은 추천하지 않습니다. 영어를 사용하는 것을 권장드립니다."
+            ]
         }
     ]
 }
