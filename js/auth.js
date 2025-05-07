@@ -31,6 +31,13 @@ function checkLoginStatus() {
     // localStorage에서 로그인 상태 확인
     isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     
+    // 로그인 상태에 따라 문서 바디에 클래스 추가/제거
+    if (isLoggedIn) {
+        document.body.classList.add('logged-in');
+    } else {
+        document.body.classList.remove('logged-in');
+    }
+    
     // 로그인 상태에 따라 UI 업데이트
     updateUIByLoginStatus();
 }
@@ -49,6 +56,9 @@ function setupLoginButton() {
                 // 로그인 성공
                 isLoggedIn = true;
                 localStorage.setItem('isLoggedIn', 'true');
+                
+                // 부모 요소에 로그인 상태 표시
+                document.body.classList.add('logged-in');
                 
                 // 성공 메시지
                 loginError.textContent = '로그인 성공!';
@@ -140,6 +150,9 @@ function handleLogout(e) {
             // 로그아웃 처리
             isLoggedIn = false;
             localStorage.removeItem('isLoggedIn');
+            
+            // 공통 요소에서 로그인 상태 표시 제거
+            document.body.classList.remove('logged-in');
             
             // UI 업데이트
             updateUIByLoginStatus();

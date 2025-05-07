@@ -3,6 +3,9 @@
 /* 기본 스타일 */
 @import 'base.css';
 
+/* 페이지 로드 시 즉시 적용되는 스타일 */
+@import 'components/preload.css';
+
 /* 레이아웃 */
 @import 'layout.css';
 
