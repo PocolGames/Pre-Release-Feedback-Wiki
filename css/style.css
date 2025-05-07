@@ -545,7 +545,7 @@ body {
 }
 
 .feedback-container {
-    padding: 20px;
+    padding: 0px;
     position: relative;
     min-height: 300px;
 }
@@ -579,6 +579,7 @@ body {
     display: block;
     opacity: 1;
     position: relative;
+    padding-bottom: 20px;
 }
 
 .member-info {
