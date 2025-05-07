@@ -102,7 +102,6 @@ function resetFeedbackPage() {
     const initialMessage = document.querySelector('.initial-message');
     if (initialMessage) {
         initialMessage.style.display = 'block';
-        initialMessage.style.opacity = '1';
     }
 }
 
@@ -464,11 +463,30 @@ function setupMemberDropdowns() {
             const memberId = this.getAttribute('data-member');
             const selectedFeedback = document.getElementById(memberId + '-feedback');
             const dropdownBtn = this.closest('.dropdown-content').previousElementSibling;
+            const currentDropdown = this.closest('.member-dropdown');
             
             // 이미 선택된 옵션인지 확인
             if (this.classList.contains('active')) {
                 return; // 이미 활성화된 경우 완료
             }
+            
+            // 현재 선택한 드롭다운이 아닌 다른 드롭다운 초기화
+            document.querySelectorAll('.member-dropdown').forEach(dropdown => {
+                if (dropdown !== currentDropdown) {
+                    // 드롭다운 버튼 텍스트 초기화
+                    const otherBtn = dropdown.querySelector('.dropdown-btn');
+                    otherBtn.querySelector('.dropdown-text').textContent = '멤버 선택';
+                    otherBtn.classList.remove('active');
+                    
+                    // 드롭다운 컨텐츠 닫기
+                    dropdown.querySelector('.dropdown-content').classList.remove('show');
+                    
+                    // 모든 옵션 비활성화
+                    dropdown.querySelectorAll('.member-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                }
+            });
             
             // 모든 옵션에서 active 클래스 제거
             this.closest('.dropdown-content').querySelectorAll('.member-option').forEach(op => {
@@ -485,42 +503,25 @@ function setupMemberDropdowns() {
             this.closest('.dropdown-content').classList.remove('show');
             dropdownBtn.classList.remove('active');
             
-            // 초기 메시지 완전히 제거
-            if (initialMessage) {
-                initialMessage.style.display = 'none';
-                initialMessage.style.opacity = '0';
-            }
+            // 초기 메시지 완전히 제거 - 여기서 모든 처리
+            document.querySelector('.initial-message').style.display = 'none';
             
             // 모든 피드백 완전히 제거
-            memberFeedbacks.forEach(feedback => {
+            document.querySelectorAll('.member-feedback').forEach(feedback => {
                 feedback.classList.remove('active');
                 feedback.style.display = 'none';
                 feedback.style.opacity = '0';
             });
             
-            // 선택한 멤버의 피드백만 표시 (지연 적용)
-            if (selectedFeedback) {
-                setTimeout(() => {
-                    // 다른 모든 피드백 완전히 제거
-                    document.querySelectorAll('.member-feedback').forEach(feedback => {
-                        if (feedback.id !== selectedFeedback.id) {
-                            feedback.classList.remove('active');
-                            feedback.style.display = 'none';
-                            feedback.style.opacity = '0';
-                        }
-                    });
-                    
-                    // 선택한 피드백 표시
+            // 선택한 피드백만 표시 (지연 적용)
+            setTimeout(() => {
+                if (selectedFeedback) {
                     selectedFeedback.style.display = 'block';
-                    
-                    // 레이아웃 재계산 강제
-                    void selectedFeedback.offsetWidth;
-                    
-                    // 표시 애니메이션 시작
+                    void selectedFeedback.offsetWidth; // 레이아웃 재계산 강제
                     selectedFeedback.classList.add('active');
                     selectedFeedback.style.opacity = '1';
-                }, 50);
-            }
+                }
+            }, 50);
         });
     });
 }
