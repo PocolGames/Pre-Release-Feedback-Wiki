@@ -62,7 +62,15 @@ function setupLoginButton() {
                 
                 // 성공 메시지
                 loginError.textContent = '로그인 성공!';
-                loginError.style.color = 'green';
+                loginError.style.color = 'var(--accent-color)';
+                loginError.classList.add('login-success');
+                
+                // 로그인 버튼 업데이트
+                loginButton.textContent = '환영합니다!';
+                loginButton.classList.add('login-success-btn');
+                
+                // 입력 필드 비활성화
+                passwordInput.disabled = true;
                 
                 // UI 업데이트
                 updateUIByLoginStatus();
@@ -222,21 +230,21 @@ function handleRestrictedContent() {
 
 // 로그인 오버레이 생성 함수
 function createLoginOverlay(id) {
-    const overlay = document.createElement('div');
-    overlay.className = 'login-overlay';
-    overlay.id = `${id}-overlay`;
-    overlay.innerHTML = `
-        <p>로그인이 필요한 페이지입니다.</p>
-        <button class="goto-login-btn">로그인 하기</button>
-    `;
-    
-    // 로그인 버튼 이벤트 리스너
-    const loginBtn = overlay.querySelector('.goto-login-btn');
-    loginBtn.addEventListener('click', function() {
-        window.location.hash = 'login';
-    });
-    
-    return overlay;
+const overlay = document.createElement('div');
+overlay.className = 'login-overlay';
+overlay.id = `${id}-overlay`;
+overlay.innerHTML = `
+<p>로그인이 필요한 페이지입니다.</p>
+<button class="goto-login-btn">로그인 하기</button>
+`;
+
+// 로그인 버튼 이벤트 리스너
+const loginBtn = overlay.querySelector('.goto-login-btn');
+loginBtn.addEventListener('click', function() {
+window.location.hash = 'login';
+});
+
+return overlay;
 }
 
 
