@@ -12,6 +12,7 @@
 @import 'components/cards.css';
 @import 'components/gallery.css';
 @import 'components/feedback.css';
+@import 'components/login.css';
 
 /* 반응형 스타일 */
 @import 'responsive.css';

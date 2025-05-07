@@ -22,7 +22,7 @@
                 <li><a href="#about"><i class="fas fa-info-circle"></i> <span class="nav-text">동아리 소개</span></a></li>
                 <li><a href="#gallery"><i class="fas fa-images"></i> <span class="nav-text">작업물 갤러리</span></a></li>
                 <li><a href="#feedback"><i class="fas fa-comments"></i> <span class="nav-text">피드백 내용</span></a></li>
-                <li><a href="#apply"><i class="fas fa-user-plus"></i> <span class="nav-text">지원 방법</span></a></li>
+                <li><a href="#login"><i class="fas fa-sign-in-alt"></i> <span class="nav-text">로그인</span></a></li>
             </ul>
             <div class="social-links">
                 <a href="https://github.com/" target="_blank">
@@ -87,6 +87,7 @@
                         <p>프리릴리즈는 실력보다 게임 개발에 대한 진지한 관심과 지속적인 참여 의지를 가장 중요하게 생각합니다.</p>
                         <p>개발이 처음인 분도, 방향이 필요한 분도, 이미 프로젝트 경험이 있는 분도 모두 환영합니다.</p>
                         <p>게임을 개발하고, 진짜로 출시해보고 싶다면 프리릴리즈에서 그 첫걸음을 시작해보세요.</p>
+                        <button id="apply-button" class="apply-button">지원 방법 자세히 보기 <i class="fas fa-arrow-right"></i></button>
                     </div>
                 </div>
             </section>
@@ -161,8 +162,8 @@
                 </div>
             </section>
 
-            <!-- 지원 방법 섹션 -->
-            <section id="apply" class="hidden-section">
+            <!-- 지원 방법 섹션 (ID 변경) -->
+            <section id="apply-info" class="hidden-section">
                 <h2 class="section-title">지원 방법</h2>
                 
                 <div class="apply-content">
@@ -206,10 +207,27 @@
                     </div>
                 </div>
             </section>
+
+            <!-- 로그인 섹션 -->
+            <section id="login" class="hidden-section">
+                <h2 class="section-title">로그인</h2>
+                
+                <div class="login-content">
+                    <div class="login-form">
+                        <p>작업물 갤러리와 피드백 내용을 확인하려면 로그인이 필요합니다.</p>
+                        <div class="form-group">
+                            <input type="password" id="password-input" placeholder="비밀번호를 입력하세요">
+                        </div>
+                        <button type="button" id="login-button" class="login-btn">로그인</button>
+                        <p id="login-error" class="login-error"></p>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
     <!-- JavaScript 파일 연결 -->
     <script src="js/script.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 </html>

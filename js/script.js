@@ -32,8 +32,15 @@ function setupNavigation() {
 function handleHashChange() {
     let pageId = window.location.hash.substring(1) || 'home';
     
-    // 메뉴 활성화 상태 변경
-    updateActiveMenu(pageId);
+    // 특수 페이지 처리 (apply-info는 상단 메뉴에 없음)
+    if (pageId === 'apply-info') {
+        // 메뉴 선택 상태 초기화
+        const allLinks = document.querySelectorAll('.nav-links li');
+        allLinks.forEach(link => link.classList.remove('active'));
+    } else {
+        // 메뉴 활성화 상태 변경
+        updateActiveMenu(pageId);
+    }
     
     // 페이지 표시
     showPage(pageId);
@@ -66,6 +73,17 @@ function showPage(pageId) {
         // 피드백 페이지로 전환시 초기화
         if (pageId === 'feedback') {
             resetFeedbackPage();
+        }
+        
+        // 로그인 페이지로 전환시 초기화
+        if (pageId === 'login') {
+            // 비밀번호 입력 필드 초기화
+            const passwordInput = document.getElementById('password-input');
+            const loginError = document.getElementById('login-error');
+            if (passwordInput) {
+                passwordInput.value = '';
+                if (loginError) loginError.textContent = '';
+            }
         }
         
         // 페이지 상단으로 스크롤
@@ -101,7 +119,11 @@ function resetFeedbackPage() {
     // 초기 메시지 표시
     const initialMessage = document.querySelector('.initial-message');
     if (initialMessage) {
-        initialMessage.style.display = 'block';
+        initialMessage.style.visibility = 'visible';
+        initialMessage.style.position = 'relative';
+        initialMessage.style.height = 'auto';
+        initialMessage.style.minHeight = '200px';
+        initialMessage.style.padding = '50px 0';
     }
 }
 
@@ -449,9 +471,17 @@ function setupMemberDropdowns() {
             // 드롭다운이 열릴 때 초기 메시지 숨기기
             if (dropdownContent.classList.contains('show')) {
                 initialMessage.style.visibility = 'hidden';
+                initialMessage.style.position = 'absolute';
+                initialMessage.style.height = '0';
+                initialMessage.style.minHeight = '0';
+                initialMessage.style.padding = '0';
             } else if (!document.querySelector('.member-feedback.active')) {
                 // 활성화된 피드백이 없을 때만 초기 메시지 다시 표시
                 initialMessage.style.visibility = 'visible';
+                initialMessage.style.position = 'relative';
+                initialMessage.style.height = 'auto';
+                initialMessage.style.minHeight = '200px';
+                initialMessage.style.padding = '50px 0';
             }
         });
     });
@@ -512,7 +542,12 @@ function setupMemberDropdowns() {
             dropdownBtn.classList.remove('active');
             
             // 초기 메시지 완전히 제거 - 여기서 모든 처리
-            document.querySelector('.initial-message').style.visibility = 'hidden';
+            const initialMsg = document.querySelector('.initial-message');
+            initialMsg.style.visibility = 'hidden';
+            initialMsg.style.position = 'absolute';
+            initialMsg.style.height = '0';
+            initialMsg.style.minHeight = '0';
+            initialMsg.style.padding = '0';
             
             // 모든 피드백 완전히 제거
             document.querySelectorAll('.member-feedback').forEach(feedback => {
