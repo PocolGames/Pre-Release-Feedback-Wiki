@@ -445,6 +445,14 @@ function setupMemberDropdowns() {
             // 클릭한 드롭다운 토글
             this.classList.toggle('active');
             dropdownContent.classList.toggle('show');
+            
+            // 드롭다운이 열릴 때 초기 메시지 숨기기
+            if (dropdownContent.classList.contains('show')) {
+                initialMessage.style.display = 'none';
+            } else if (!document.querySelector('.member-feedback.active')) {
+                // 활성화된 피드백이 없을 때만 초기 메시지 다시 표시
+                initialMessage.style.display = 'block';
+            }
         });
     });
     
