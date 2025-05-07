@@ -174,21 +174,22 @@ function applyRestriction(element) {
         element.classList.add('restricted-content');
         
         // 기존 오버레이 제거 (중복 방지)
-        const existingOverlay = element.querySelector('.login-overlay');
+        const existingOverlay = document.querySelector(`#${element.id}-overlay`);
         if (existingOverlay) {
-            element.removeChild(existingOverlay);
+            existingOverlay.remove();
         }
         
-        // 오버레이 생성 및 추가
+        // 오버레이 생성
         const overlay = document.createElement('div');
         overlay.className = 'login-overlay';
+        overlay.id = `${element.id}-overlay`;
         overlay.innerHTML = `
             <p>로그인이 필요한 페이지입니다.</p>
             <button class="goto-login-btn">로그인 하기</button>
         `;
         
-        // 오버레이를 콘텐츠 보다 앞에 추가 (첫번째 자식으로)
-        element.prepend(overlay);
+        // 오버레이를 요소 바로 앞에 추가 (형제 요소로)
+        element.parentNode.insertBefore(overlay, element);
         
         // 로그인 버튼 이벤트 리스너
         const loginBtn = overlay.querySelector('.goto-login-btn');
@@ -204,8 +205,8 @@ function removeRestriction(element) {
     element.classList.remove('restricted-content');
     
     // 오버레이 제거
-    const overlay = element.querySelector('.login-overlay');
+    const overlay = document.querySelector(`#${element.id}-overlay`);
     if (overlay) {
-        element.removeChild(overlay);
+        overlay.remove();
     }
 }
