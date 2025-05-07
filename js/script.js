@@ -1,0 +1,593 @@
+// 페이지 로드 시 실행
+document.addEventListener('DOMContentLoaded', function() {
+    // 사이드바 메뉴 이벤트 설정
+    setupNavigation();
+    
+    // 데이터 로드
+    loadData();
+    
+    // 해시 변경 이벤트 리스너
+    window.addEventListener('hashchange', handleHashChange);
+    
+    // 초기 페이지 로드
+    handleHashChange();
+});
+
+// 네비게이션 설정
+function setupNavigation() {
+    const navLinks = document.querySelectorAll('.nav-links li a');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // 기본 이벤트 방지
+            e.preventDefault();
+            
+            // 해시 변경
+            window.location.hash = this.getAttribute('href').substring(1);
+        });
+    });
+}
+
+// 해시 변경 처리
+function handleHashChange() {
+    let pageId = window.location.hash.substring(1) || 'home';
+    
+    // 메뉴 활성화 상태 변경
+    updateActiveMenu(pageId);
+    
+    // 페이지 표시
+    showPage(pageId);
+}
+
+// 메뉴 활성화 상태 업데이트
+function updateActiveMenu(pageId) {
+    const allLinks = document.querySelectorAll('.nav-links li');
+    allLinks.forEach(link => link.classList.remove('active'));
+    
+    const activeLink = document.querySelector(`.nav-links li a[href="#${pageId}"]`);
+    if (activeLink) {
+        activeLink.parentElement.classList.add('active');
+    }
+}
+
+// 페이지 표시
+function showPage(pageId) {
+    const allSections = document.querySelectorAll('main section');
+    allSections.forEach(section => {
+        section.classList.remove('active-section');
+        section.classList.add('hidden-section');
+    });
+    
+    const activeSection = document.getElementById(pageId);
+    if (activeSection) {
+        activeSection.classList.remove('hidden-section');
+        activeSection.classList.add('active-section');
+        
+        // 피드백 페이지로 전환시 초기화
+        if (pageId === 'feedback') {
+            resetFeedbackPage();
+        }
+        
+        // 페이지 상단으로 스크롤
+        window.scrollTo(0, 0);
+    }
+}
+
+// 피드백 페이지 초기화
+function resetFeedbackPage() {
+    // 드롭다운 버튼 초기화
+    document.querySelectorAll('.dropdown-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.querySelector('.dropdown-text').textContent = '멤버 선택';
+    });
+    
+    // 드롭다운 컨텐츠 닫기
+    document.querySelectorAll('.dropdown-content').forEach(content => {
+        content.classList.remove('show');
+    });
+    
+    // 메버 옵션 초기화
+    document.querySelectorAll('.member-option').forEach(option => {
+        option.classList.remove('active');
+    });
+    
+    // 모든 피드백 컨텐츠 완전히 제거
+    document.querySelectorAll('.member-feedback').forEach(feedback => {
+        feedback.classList.remove('active');
+        feedback.style.display = 'none';
+        feedback.style.opacity = '0';
+    });
+    
+    // 초기 메시지 표시
+    const initialMessage = document.querySelector('.initial-message');
+    if (initialMessage) {
+        initialMessage.style.display = 'block';
+    }
+}
+
+// 데이터 로드
+function loadData() {
+    // 포스트 데이터 로드
+    fetch('data/posts.json')
+        .then(response => response.json())
+        .then(data => {
+            loadPosts(data);
+        })
+        .catch(error => {
+            console.error('포스트 데이터 로드 실패:', error);
+            document.getElementById('posts-container').innerHTML = '<div class="error-message">포스트 데이터를 불러오는 데 실패했습니다.</div>';
+        });
+    
+    // 프로젝트 데이터 로드
+    fetch('data/projects.json')
+        .then(response => response.json())
+        .then(data => {
+            loadProjects(data);
+        })
+        .catch(error => {
+            console.error('프로젝트 데이터 로드 실패:', error);
+            document.querySelector('.gallery-grid').innerHTML = '<div class="error-message">프로젝트 데이터를 불러오는 데 실패했습니다.</div>';
+        });
+    
+    // 멤버 및 피드백 데이터 로드
+    Promise.all([
+        fetch('data/members.json').then(res => res.json()),
+        fetch('data/feedbacks.json').then(res => res.json())
+    ])
+    .then(([membersData, feedbacksData]) => {
+        loadMembers(membersData);
+        loadFeedbacks(membersData, feedbacksData);
+    })
+    .catch(error => {
+        console.error('멤버/피드백 데이터 로드 실패:', error);
+        document.querySelector('.member-tabs').innerHTML = '<div class="error-message">데이터를 불러오는 데 실패했습니다.</div>';
+    });
+}
+
+// 포스트 로드
+function loadPosts(data) {
+    const postsContainer = document.getElementById('posts-container');
+    if (!postsContainer) return;
+    
+    let postsHTML = '';
+    
+    // 포스트 데이터로 HTML 생성
+    data.posts.forEach(post => {
+        postsHTML += `
+            <div class="post">
+                <div class="post-header">
+                    <div class="post-avatar">PR</div>
+                    <div class="post-info">
+                        <h3>${post.title}</h3>
+                        <span class="post-date">${post.date}</span>
+                    </div>
+                </div>
+                <div class="post-content">
+                    ${post.content.map(p => `<p>${p}</p>`).join('')}
+                </div>
+                <div class="post-footer">
+                    <span class="post-reaction"><i class="far fa-heart"></i> ${post.likes}</span>
+                    <span class="post-comments"><i class="far fa-comment"></i> ${post.comments}</span>
+                    <span class="post-share"><i class="far fa-share-square"></i></span>
+                </div>
+            </div>
+        `;
+    });
+    
+    postsContainer.innerHTML = postsHTML;
+    
+    // 이벤트 리스너 설정
+    setupPostInteractions();
+}
+
+// 프로젝트 로드
+function loadProjects(data) {
+    const galleryGrid = document.querySelector('.gallery-grid');
+    if (!galleryGrid) return;
+    
+    let projectsHTML = '';
+    
+    // 프로젝트 데이터로 HTML 생성
+    data.projects.forEach(project => {
+        projectsHTML += `
+            <div class="gallery-item ${project.category}">
+                <div class="gallery-image ${project.image ? '' : 'placeholder'}">
+                    ${project.image 
+                        ? `<img src="${project.image}" alt="${project.title}">` 
+                        : `<div class="image-placeholder">${project.categoryName} 작업물</div>`
+                    }
+                </div>
+                <div class="gallery-info">
+                    <h3>${project.title}</h3>
+                    <p>${project.author}</p>
+                    <div class="gallery-links">
+                        <a href="#" class="view-btn" data-id="${project.id}"><i class="fas fa-eye"></i> 자세히 보기</a>
+                        ${project.github 
+                            ? `<a href="${project.github}" target="_blank" class="github-btn"><i class="fab fa-github"></i> GitHub</a>` 
+                            : ''
+                        }
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    galleryGrid.innerHTML = projectsHTML;
+    
+    // 이벤트 리스너 설정
+    setupGalleryEvents(data);
+    setupGalleryFilter();
+}
+
+// 멤버 로드
+function loadMembers(data) {
+    // 프로그래머 드롭다운
+    const programmerDropdown = document.querySelector('.programmer-dropdown-content');
+    if (programmerDropdown) {
+        let programmerHTML = '';
+        
+        // 프로그래머 필터링
+        const programmers = data.members.filter(member => member.category === 'programmer');
+        
+        programmers.forEach((member, index) => {
+            programmerHTML += `
+                <button class="member-option" data-member="${member.id}">${member.name}</button>
+            `;
+        });
+        
+        programmerDropdown.innerHTML = programmerHTML;
+    }
+    
+    // 디자이너 드롭다운
+    const designerDropdown = document.querySelector('.designer-dropdown-content');
+    if (designerDropdown) {
+        let designerHTML = '';
+        
+        // 디자이너 필터링
+        const designers = data.members.filter(member => member.category === 'designer');
+        
+        designers.forEach((member, index) => {
+            designerHTML += `
+                <button class="member-option" data-member="${member.id}">${member.name}</button>
+            `;
+        });
+        
+        designerDropdown.innerHTML = designerHTML;
+    }
+    
+    // 이벤트 리스너 설정
+    setupMemberDropdowns();
+}
+
+// 피드백 로드
+function loadFeedbacks(membersData, feedbacksData) {
+    const feedbackContainer = document.querySelector('.feedback-container');
+    if (!feedbackContainer) return;
+    
+    let feedbacksHTML = '<div class="initial-message"><p>멤버를 선택하여 피드백 내용을 확인하세요.</p></div>';
+    
+    // 각 멤버별 피드백 HTML 생성
+    membersData.members.forEach(member => {
+        // 해당 멤버의 피드백 필터링
+        const memberFeedbacks = feedbacksData.feedbacks.filter(f => f.memberId === member.id);
+        
+        feedbacksHTML += `
+            <div class="member-feedback" id="${member.id}-feedback">
+                <div class="member-info">
+                    <h3>${member.name}</h3>
+                    <p>${member.role}</p>
+                    <div class="member-links">
+                        <a href="#gallery" class="member-gallery-btn" data-filter="${member.id}">
+                            <i class="fas fa-images"></i> 작업물 보기
+                        </a>
+                        ${member.github 
+                            ? `<a href="${member.github}" target="_blank" class="github-btn">
+                                 <i class="fab fa-github"></i> GitHub
+                               </a>` 
+                            : ''
+                        }
+                    </div>
+                </div>
+                
+                <div class="feedback-list">
+        `;
+        
+        // 피드백 항목 추가
+        if (memberFeedbacks.length > 0) {
+            memberFeedbacks.forEach(feedback => {
+                feedbacksHTML += `
+                    <div class="feedback-item">
+                        <div class="feedback-header">
+                            <h4>${feedback.title}</h4>
+                            <span class="feedback-date">${feedback.date}</span>
+                        </div>
+                        <div class="feedback-content">
+                            ${feedback.content.map(p => `<p>${p}</p>`).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            feedbacksHTML += `
+                <div class="no-feedback">
+                    <p>아직 피드백 내용이 없습니다.</p>
+                </div>
+            `;
+        }
+        
+        feedbacksHTML += `
+                </div>
+            </div>
+        `;
+    });
+    
+    feedbackContainer.innerHTML = feedbacksHTML;
+    
+    // 이벤트 리스너 설정
+    setupFeedbackEvents();
+}
+
+// 갤러리 필터링 설정
+function setupGalleryFilter() {
+    const filterBtns = document.querySelectorAll('.gallery-tabs .tab-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // 모든 버튼에서 active 클래스 제거
+            filterBtns.forEach(b => b.classList.remove('active'));
+            
+            // 클릭한 버튼에 active 클래스 추가
+            this.classList.add('active');
+            
+            // 필터 카테고리 가져오기
+            const category = this.getAttribute('data-category');
+            
+            // 갤러리 아이템 필터링
+            galleryItems.forEach(item => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+}
+
+// 갤러리 이벤트 설정
+function setupGalleryEvents(projectsData) {
+    // 자세히 보기 버튼 이벤트
+    const viewButtons = document.querySelectorAll('.view-btn');
+    viewButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const projectId = this.getAttribute('data-id');
+            showProjectDetails(projectId, projectsData);
+        });
+    });
+}
+
+// 프로젝트 상세 보기 표시
+function showProjectDetails(projectId, projectsData) {
+    const project = projectsData.projects.find(p => p.id === projectId);
+    
+    if (!project) {
+        alert('프로젝트 정보를 찾을 수 없습니다.');
+        return;
+    }
+    
+    // 모달 생성
+    const modal = document.createElement('div');
+    modal.classList.add('project-modal');
+    
+    // 모달 내용 설정
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>${project.title}</h2>
+            <p class="project-author">제작자: ${project.author}</p>
+            <div class="project-details">
+                ${project.description.map(p => `<p>${p}</p>`).join('')}
+            </div>
+            ${project.images && project.images.length > 0 ?
+                `<div class="project-gallery">
+                    ${project.images.map(img => `<img src="${img}" alt="${project.title}">`).join('')}
+                </div>` : ''
+            }
+            ${project.github ?
+                `<a href="${project.github}" target="_blank" class="github-btn">
+                    <i class="fab fa-github"></i> GitHub 바로가기
+                </a>` : ''
+            }
+        </div>
+    `;
+    
+    // 모달 추가 및 표시
+    document.body.appendChild(modal);
+    
+    // 모달 닫기 버튼 이벤트
+    const closeButton = modal.querySelector('.close-modal');
+    closeButton.addEventListener('click', function() {
+        document.body.removeChild(modal);
+    });
+    
+    // 모달 외부 클릭 시 닫기
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            document.body.removeChild(modal);
+        }
+    });
+}
+
+// 멤버 드롭다운 설정
+function setupMemberDropdowns() {
+    // 드롭다운 버튼 클릭 이벤트
+    const dropdownBtns = document.querySelectorAll('.dropdown-btn');
+    const dropdownContents = document.querySelectorAll('.dropdown-content');
+    const memberOptions = document.querySelectorAll('.member-option');
+    const memberFeedbacks = document.querySelectorAll('.member-feedback');
+    const initialMessage = document.querySelector('.initial-message');
+    
+    // 드롭다운 버튼 클릭 시 드롭다운 컨텐츠 표시/숨기기
+    dropdownBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const dropdownContent = this.nextElementSibling;
+            
+            // 다른 모든 드롭다운 닫기
+            dropdownContents.forEach(content => {
+                if (content !== dropdownContent) {
+                    content.classList.remove('show');
+                    content.previousElementSibling.classList.remove('active');
+                }
+            });
+            
+            // 클릭한 드롭다운 토글
+            this.classList.toggle('active');
+            dropdownContent.classList.toggle('show');
+        });
+    });
+    
+    // 외부 클릭 시 드롭다운 닫기
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.member-dropdown')) {
+            dropdownBtns.forEach(btn => btn.classList.remove('active'));
+            dropdownContents.forEach(content => content.classList.remove('show'));
+        }
+    });
+    
+    // 멤버 옵션 클릭 이벤트 설정
+    memberOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            // 멤버 ID 가져오기
+            const memberId = this.getAttribute('data-member');
+            const selectedFeedback = document.getElementById(memberId + '-feedback');
+            const dropdownBtn = this.closest('.dropdown-content').previousElementSibling;
+            const currentDropdown = this.closest('.member-dropdown');
+            
+            // 이미 선택된 옵션인지 확인
+            if (this.classList.contains('active')) {
+                return; // 이미 활성화된 경우 완료
+            }
+            
+            // 현재 선택한 드롭다운이 아닌 다른 드롭다운 초기화
+            document.querySelectorAll('.member-dropdown').forEach(dropdown => {
+                if (dropdown !== currentDropdown) {
+                    // 드롭다운 버튼 텍스트 초기화
+                    const otherBtn = dropdown.querySelector('.dropdown-btn');
+                    otherBtn.querySelector('.dropdown-text').textContent = '멤버 선택';
+                    otherBtn.classList.remove('active');
+                    
+                    // 드롭다운 컨텐츠 닫기
+                    dropdown.querySelector('.dropdown-content').classList.remove('show');
+                    
+                    // 모든 옵션 비활성화
+                    dropdown.querySelectorAll('.member-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                }
+            });
+            
+            // 모든 옵션에서 active 클래스 제거
+            this.closest('.dropdown-content').querySelectorAll('.member-option').forEach(op => {
+                op.classList.remove('active');
+            });
+            
+            // 클릭한 옵션에 active 클래스 추가
+            this.classList.add('active');
+            
+            // 드롭다운 버튼 텍스트 변경
+            dropdownBtn.querySelector('.dropdown-text').textContent = this.textContent;
+            
+            // 드롭다운 닫기
+            this.closest('.dropdown-content').classList.remove('show');
+            dropdownBtn.classList.remove('active');
+            
+            // 초기 메시지 완전히 제거 - 여기서 모든 처리
+            document.querySelector('.initial-message').style.display = 'none';
+            
+            // 모든 피드백 완전히 제거
+            document.querySelectorAll('.member-feedback').forEach(feedback => {
+                feedback.classList.remove('active');
+                feedback.style.display = 'none';
+                feedback.style.opacity = '0';
+            });
+            
+            // 선택한 피드백만 표시 (지연 적용)
+            setTimeout(() => {
+                if (selectedFeedback) {
+                    selectedFeedback.style.display = 'block';
+                    void selectedFeedback.offsetWidth; // 레이아웃 재계산 강제
+                    selectedFeedback.classList.add('active');
+                    selectedFeedback.style.opacity = '1';
+                }
+            }, 50);
+        });
+    });
+}
+
+// 피드백 이벤트 설정
+function setupFeedbackEvents() {
+    // 작업물 보기 버튼 이벤트
+    const galleryButtons = document.querySelectorAll('.member-gallery-btn');
+    galleryButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            // 갤러리 페이지로 이동
+            setTimeout(() => {
+                const memberId = this.getAttribute('data-filter');
+                const memberCategory = memberId.includes('programmer') ? 'programmer' : 'designer';
+                
+                // 해당 카테고리 필터 버튼 찾기
+                const filterBtn = document.querySelector(`.gallery-tabs .tab-btn[data-category="${memberCategory}"]`);
+                if (filterBtn) {
+                    filterBtn.click();
+                }
+            }, 100);
+        });
+    });
+}
+
+// 포스트 인터랙션 설정
+function setupPostInteractions() {
+    // 좋아요 버튼 인터랙션
+    const likeButtons = document.querySelectorAll('.post-reaction');
+    likeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            const countText = this.textContent.trim().split(' ')[1];
+            let count = parseInt(countText);
+            
+            if (icon.classList.contains('far')) {
+                // 좋아요 추가
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                icon.style.color = 'var(--like-color)';
+                count++;
+            } else {
+                // 좋아요 취소
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                icon.style.color = '';
+                count--;
+            }
+            
+            this.innerHTML = `<i class="${icon.className}"></i> ${count}`;
+        });
+    });
+    
+    // 댓글 버튼 인터랙션
+    const commentButtons = document.querySelectorAll('.post-comments');
+    commentButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            alert('댓글 기능은 현재 준비 중입니다.');
+        });
+    });
+    
+    // 공유 버튼 인터랙션
+    const shareButtons = document.querySelectorAll('.post-share');
+    shareButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            alert('공유 기능은 현재 준비 중입니다.');
+        });
+    });
+}

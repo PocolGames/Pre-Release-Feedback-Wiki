@@ -1,0 +1,124 @@
+{
+    "members": [
+        {
+            "id": "kangwoosung",
+            "name": "강우성",
+            "role": "프로그래머",
+            "category": "programmer",
+            "github": "https://github.com/woosung03",
+            "profileImg": ""
+        },
+        {
+            "id": "kwakminsung",
+            "name": "곽민성",
+            "role": "프로그래머",
+            "category": "programmer",
+            "github": "https://github.com/kwakminsung",
+            "profileImg": ""
+        },
+        {
+            "id": "parkseongbin",
+            "name": "박성빈",
+            "role": "프로그래머",
+            "category": "programmer",
+            "github": "https://github.com/SeongbeenPark",
+            "profileImg": ""
+        },
+        {
+            "id": "shinsunghyun",
+            "name": "신성현",
+            "role": "프로그래머",
+            "category": "programmer",
+            "github": "https://github.com/olnoon",
+            "profileImg": ""
+        },
+        {
+            "id": "limeunsub",
+            "name": "임은섭",
+            "role": "프로그래머",
+            "category": "programmer",
+            "github": "https://github.com/0nionTree",
+            "profileImg": ""
+        },
+        {
+            "id": "jeonbyeonggeun",
+            "name": "전병근",
+            "role": "프로그래머",
+            "category": "programmer",
+            "github": "https://github.com/AxaZombie",
+            "profileImg": ""
+        },
+        {
+            "id": "johyunsung",
+            "name": "조현성",
+            "role": "프로그래머",
+            "category": "programmer",
+            "github": "https://github.com/JHSos21",
+            "profileImg": ""
+        },
+        {
+            "id": "chawoosoek",
+            "name": "차우석",
+            "role": "프로그래머",
+            "category": "programmer",
+            "github": "https://github.com/rainstone99",
+            "profileImg": ""
+        },
+        {
+            "id": "namjihyun",
+            "name": "남지현",
+            "role": "디자이너",
+            "category": "designer",
+            "github": "",
+            "profileImg": ""
+        },
+        {
+            "id": "moonchoa",
+            "name": "문초아",
+            "role": "디자이너",
+            "category": "designer",
+            "github": "",
+            "profileImg": ""
+        },
+        {
+            "id": "parkchulmin",
+            "name": "박철민",
+            "role": "디자이너",
+            "category": "designer",
+            "github": "",
+            "profileImg": ""
+        },
+        {
+            "id": "parkharam",
+            "name": "박하람",
+            "role": "디자이너",
+            "category": "designer",
+            "github": "",
+            "profileImg": ""
+        },
+        {
+            "id": "leejonghyun",
+            "name": "이정현",
+            "role": "디자이너",
+            "category": "designer",
+            "github": "",
+            "profileImg": "..\\문서\\피드백\\디자이너\\이정현\\Art _Feedback_Session_2\\04.png"
+        },
+        {
+            "id": "leehyunwoo",
+            "name": "이현우",
+            "role": "디자이너",
+            "category": "designer",
+            "github": "",
+            "profileImg": ""
+        },
+        {
+            "id": "jungdaun",
+            "name": "정다운",
+            "role": "디자이너",
+            "category": "designer",
+            "github": "",
+            "profileImg": ""
+        }
+    ]
+}
