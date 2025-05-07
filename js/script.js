@@ -44,6 +44,11 @@ function handleHashChange() {
     
     // 페이지 표시
     showPage(pageId);
+    
+    // 제한된 콘텐츠 수동으로 처리 (인증 관련 JS에서 처리하기 위해)
+    if (typeof handleRestrictedContent === 'function') {
+        setTimeout(handleRestrictedContent, 100);
+    }
 }
 
 // 메뉴 활성화 상태 업데이트

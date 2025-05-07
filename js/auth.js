@@ -121,8 +121,13 @@ function updateUIByLoginStatus() {
         }
     }
     
-    // 제한된 콘텐츠 처리
+    // 제한된 콘텐츠 처리 호출
     handleRestrictedContent();
+    
+    // 해시 변경 없이 현재 화면 새로고침 효과를 주기 위해
+    // 현재 페이지 다시 로드
+    const currentHash = window.location.hash.substring(1) || 'home';
+    showPage(currentHash);
 }
 
 // 로그아웃 처리
@@ -153,93 +158,72 @@ function handleRestrictedContent() {
     // 갤러리와 피드백 섹션 요소
     const gallerySection = document.getElementById('gallery');
     const feedbackSection = document.getElementById('feedback');
-    const loginSection = document.getElementById('login');
     
-    // 로그인 페이지에 표시되는 오버레이 제거
-    const loginOverlays = document.querySelectorAll('.login-overlay');
-    loginOverlays.forEach(overlay => {
-        // 현재 페이지가 로그인이면 모든 오버레이 제거
-        if (window.location.hash.substring(1) === 'login') {
-            overlay.remove();
-        }
+    // 모든 오버레이 제거 (기존 오버레이 초기화)
+    const allOverlays = document.querySelectorAll('.login-overlay');
+    allOverlays.forEach(overlay => {
+        overlay.remove();
     });
+    
+    // 현재 페이지 확인
+    const currentPage = window.location.hash.substring(1) || 'home';
+    
+    // 로그인 페이지인 경우 오버레이 추가하지 않고 종료
+    if (currentPage === 'login') {
+        return;
+    }
     
     if (gallerySection && feedbackSection) {
         if (isLoggedIn) {
             // 로그인 상태: 제한 해제
-            removeRestriction(gallerySection);
-            removeRestriction(feedbackSection);
+            gallerySection.classList.remove('restricted-content');
+            feedbackSection.classList.remove('restricted-content');
         } else {
             // 비로그인 상태: 제한 적용
-            applyRestriction(gallerySection);
-            applyRestriction(feedbackSection);
             
-            // 현재 페이지가 제한된 페이지인지 확인
-            const currentHash = window.location.hash.substring(1);
-            if (currentHash === 'gallery' || currentHash === 'feedback') {
-                // 페이지 상단으로 스크롤
+            // 갤러리 페이지 제한 처리
+            if (currentPage === 'gallery') {
+                gallerySection.classList.add('restricted-content');
+                
+                // 오버레이 생성 및 추가
+                const overlay = createLoginOverlay('gallery');
+                gallerySection.parentNode.insertBefore(overlay, gallerySection);
+            }
+            
+            // 피드백 페이지 제한 처리
+            if (currentPage === 'feedback') {
+                feedbackSection.classList.add('restricted-content');
+                
+                // 오버레이 생성 및 추가
+                const overlay = createLoginOverlay('feedback');
+                feedbackSection.parentNode.insertBefore(overlay, feedbackSection);
+            }
+            
+            // 페이지 상단으로 스크롤
+            if (currentPage === 'gallery' || currentPage === 'feedback') {
                 window.scrollTo(0, 0);
             }
         }
     }
 }
 
-// 제한 적용
-function applyRestriction(element) {
-    // 이미 처리되어 있는지 확인
-    if (!element.classList.contains('restricted-content')) {
-        // 제한 클래스 추가
-        element.classList.add('restricted-content');
-        
-        // 기존 오버레이 제거 (중복 방지)
-        const existingOverlay = document.querySelector(`#${element.id}-overlay`);
-        if (existingOverlay) {
-            existingOverlay.remove();
-        }
-        
-        // 현재 페이지가 로그인 페이지인지 상태 확인
-        if (window.location.hash.substring(1) === 'login') {
-            return; // 로그인 페이지에서는 오버레이 추가하지 않음
-        }
-        
-        // 피드백 페이지의 중복 방지
-        if (element.id === 'feedback') {
-            const galleryOverlay = document.querySelector('#gallery-overlay');
-            if (galleryOverlay && window.location.hash.substring(1) === 'feedback') {
-                // 갤러리 오버레이가 있고 피드백 페이지에 있는 경우
-                // 오버레이 하나만 표시
-                return;
-            }
-        }
-        
-        // 오버레이 생성
-        const overlay = document.createElement('div');
-        overlay.className = 'login-overlay';
-        overlay.id = `${element.id}-overlay`;
-        overlay.innerHTML = `
-            <p>로그인이 필요한 페이지입니다.</p>
-            <button class="goto-login-btn">로그인 하기</button>
-        `;
-        
-        // 오버레이를 요소 바로 앞에 추가 (형제 요소로)
-        element.parentNode.insertBefore(overlay, element);
-        
-        // 로그인 버튼 이벤트 리스너
-        const loginBtn = overlay.querySelector('.goto-login-btn');
-        loginBtn.addEventListener('click', function() {
-            window.location.hash = 'login';
-        });
-    }
+// 로그인 오버레이 생성 함수
+function createLoginOverlay(id) {
+    const overlay = document.createElement('div');
+    overlay.className = 'login-overlay';
+    overlay.id = `${id}-overlay`;
+    overlay.innerHTML = `
+        <p>로그인이 필요한 페이지입니다.</p>
+        <button class="goto-login-btn">로그인 하기</button>
+    `;
+    
+    // 로그인 버튼 이벤트 리스너
+    const loginBtn = overlay.querySelector('.goto-login-btn');
+    loginBtn.addEventListener('click', function() {
+        window.location.hash = 'login';
+    });
+    
+    return overlay;
 }
 
-// 제한 해제
-function removeRestriction(element) {
-    // 제한 클래스 제거
-    element.classList.remove('restricted-content');
-    
-    // 오버레이 제거
-    const overlay = document.querySelector(`#${element.id}-overlay`);
-    if (overlay) {
-        overlay.remove();
-    }
-}
+
