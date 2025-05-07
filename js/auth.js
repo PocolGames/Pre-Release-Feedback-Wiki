@@ -155,6 +155,13 @@ function handleRestrictedContent() {
             // 비로그인 상태: 제한 적용
             applyRestriction(gallerySection);
             applyRestriction(feedbackSection);
+            
+            // 현재 페이지가 제한된 페이지인지 확인
+            const currentHash = window.location.hash.substring(1);
+            if (currentHash === 'gallery' || currentHash === 'feedback') {
+                // 페이지 상단으로 스크롤
+                window.scrollTo(0, 0);
+            }
         }
     }
 }
@@ -180,7 +187,8 @@ function applyRestriction(element) {
             <button class="goto-login-btn">로그인 하기</button>
         `;
         
-        element.appendChild(overlay);
+        // 오버레이를 콘텐츠 보다 앞에 추가 (첫번째 자식으로)
+        element.prepend(overlay);
         
         // 로그인 버튼 이벤트 리스너
         const loginBtn = overlay.querySelector('.goto-login-btn');
