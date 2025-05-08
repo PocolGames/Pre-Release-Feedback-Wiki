@@ -114,9 +114,14 @@ class GalleryManager {
                     </div>
                 </div>
                 
-                <button class="filter-clear" id="clear-filters">
-                    <i class="fas fa-undo"></i> 필터 초기화
-                </button>
+                <div class="filter-group">
+                    <label class="filter-label">필터 옵션</label>
+                    <div class="filter-dropdown">
+                        <button class="filter-clear" id="clear-filters">
+                            <i class="fas fa-undo"></i> 필터 초기화
+                        </button>
+                    </div>
+                </div>
             </div>
         `;
         

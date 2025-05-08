@@ -35,6 +35,7 @@
 .filter-group {
     position: relative;
     min-width: 180px;
+    flex: 1;
 }
 
 .filter-label {
@@ -130,7 +131,6 @@
 
 .filter-clear {
     padding: 10px 15px;
-    margin-left: auto;
     background-color: #dfe6e9;
     border: 1px solid #b2bec3;
     border-radius: 5px;
@@ -141,6 +141,8 @@
     align-items: center;
     justify-content: center;
     font-size: 14px;
+    height: 43px; /* 드롭다운 버튼과 같은 높이로 설정 */
+    width: 100%;
 }
 
 .filter-clear:hover {
