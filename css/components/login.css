@@ -234,6 +234,7 @@
     transition: filter 0.4s ease, opacity 0.4s ease;
 }
 
+/* 로그인 오버레이 (수정) */
 .login-overlay {
     position: relative;
     width: 100%;
@@ -249,19 +250,16 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     border-radius: 12px;
-    animation: fadeInDown 0.5s ease-out;
-    transform-origin: top center;
+    /* 애니메이션 초기 상태 */
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.5s ease;
 }
 
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px) scale(0.98);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+/* 로그인 오버레이 표시 애니메이션 */
+.login-overlay.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .login-overlay p {

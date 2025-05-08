@@ -1,3 +1,46 @@
+// 피드백 페이지 초기화
+function resetFeedbackPage() {
+    // 드롭다운 버튼 텍스트 초기화
+    const dropdownBtns = document.querySelectorAll('.dropdown-btn .dropdown-text');
+    dropdownBtns.forEach(btn => {
+        btn.textContent = '멤버 선택';
+    });
+    
+    // 드롭다운 버튼 클래스 초기화
+    document.querySelectorAll('.dropdown-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // 드롭다운 콘텐츠 클래스 초기화
+    document.querySelectorAll('.dropdown-content').forEach(content => {
+        content.classList.remove('show');
+    });
+    
+    // 모든 멤버 옵션 초기화
+    document.querySelectorAll('.member-option').forEach(option => {
+        option.classList.remove('active');
+    });
+    
+    // 모든 피드백 클래스 초기화
+    document.querySelectorAll('.member-feedback').forEach(feedback => {
+        feedback.classList.remove('active');
+        feedback.style.display = 'none';
+        feedback.style.opacity = '0';
+    });
+    
+    // 초기 메시지 표시
+    const initialMessage = document.querySelector('.initial-message');
+    if (initialMessage) {
+        initialMessage.style.visibility = 'visible';
+        initialMessage.style.position = 'relative';
+        initialMessage.style.height = 'auto';
+        initialMessage.style.minHeight = '200px';
+        initialMessage.style.padding = '50px 0';
+    }
+    
+    console.log('피드백 페이지 초기화 완료');
+}
+
 // 포스트 로드
 function loadPosts(data) {
     const postsContainer = document.getElementById('posts-container');
