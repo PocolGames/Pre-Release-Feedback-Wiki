@@ -31,11 +31,14 @@ function resetFeedbackPage() {
     // 초기 메시지 표시
     const initialMessage = document.querySelector('.initial-message');
     if (initialMessage) {
+        initialMessage.style.display = 'block'; // display 속성 추가
         initialMessage.style.visibility = 'visible';
         initialMessage.style.position = 'relative';
         initialMessage.style.height = 'auto';
         initialMessage.style.minHeight = '200px';
         initialMessage.style.padding = '50px 0';
+        initialMessage.style.opacity = '1'; // 투명도 설정
+        initialMessage.style.pointerEvents = 'auto'; // 이벤트 활성화
     }
     
     console.log('피드백 페이지 초기화 완료');
@@ -195,6 +198,8 @@ function setupMemberDropdowns() {
     
     if (!dropdownBtns.length) return;
     
+    console.log('멤버 드롭다운 이벤트 설정');
+    
     // 드롭다운 버튼 클릭 시 드롭다운 컨텐츠 표시/숨기기
     dropdownBtns.forEach(btn => {
         btn.addEventListener('click', function() {
@@ -215,20 +220,37 @@ function setupMemberDropdowns() {
             this.classList.toggle('active');
             dropdownContent.classList.toggle('show');
             
-            // 드롭다운이 열릴 때 초기 메시지 숨기기
-            if (initialMessage && dropdownContent.classList.contains('show')) {
-                initialMessage.style.visibility = 'hidden';
-                initialMessage.style.position = 'absolute';
-                initialMessage.style.height = '0';
-                initialMessage.style.minHeight = '0';
-                initialMessage.style.padding = '0';
-            } else if (initialMessage && !document.querySelector('.member-feedback.active')) {
-                // 활성화된 피드백이 없을 때만 초기 메시지 다시 표시
-                initialMessage.style.visibility = 'visible';
-                initialMessage.style.position = 'relative';
-                initialMessage.style.height = 'auto';
-                initialMessage.style.minHeight = '200px';
-                initialMessage.style.padding = '50px 0';
+            // 드롭다운이 열릴 때 초기 메시지 숨기기 처리
+            const isActive = document.querySelector('.member-feedback.active');
+            if (initialMessage) {
+                // 활성화된 피드백이 있으면 초기 메시지 완전히 숨김
+                if (isActive) {
+                    console.log('활성화된 피드백 있음 - 초기 메시지 숨김');
+                    initialMessage.style.display = 'none';
+                    initialMessage.style.visibility = 'hidden';
+                    initialMessage.style.position = 'absolute';
+                    initialMessage.style.opacity = '0';
+                } else {
+                    // 드롭다운 상태에 따른 초기 메시지 처리
+                    if (dropdownContent.classList.contains('show')) {
+                        console.log('드롭다운 열림 - 초기 메시지 축소');
+                        initialMessage.style.visibility = 'hidden';
+                        initialMessage.style.position = 'absolute';
+                        initialMessage.style.height = '0';
+                        initialMessage.style.minHeight = '0';
+                        initialMessage.style.padding = '0';
+                    } else if (!document.querySelector('.dropdown-content.show')) {
+                        // 모든 드롭다운이 닫힌 상태면 초기 메시지 표시
+                        console.log('모든 드롭다운 닫힘 - 초기 메시지 표시');
+                        initialMessage.style.display = 'block';
+                        initialMessage.style.visibility = 'visible';
+                        initialMessage.style.position = 'relative';
+                        initialMessage.style.height = 'auto';
+                        initialMessage.style.minHeight = '200px';
+                        initialMessage.style.padding = '50px 0';
+                        initialMessage.style.opacity = '1';
+                    }
+                }
             }
         });
     });
@@ -238,12 +260,27 @@ function setupMemberDropdowns() {
         if (!e.target.closest('.member-dropdown')) {
             dropdownBtns.forEach(btn => btn.classList.remove('active'));
             dropdownContents.forEach(content => content.classList.remove('show'));
+            
+            // 활성화된 멤버 피드백이 없으면 초기 메시지 표시
+            const isActive = document.querySelector('.member-feedback.active');
+            if (!isActive && initialMessage) {
+                console.log('활성화된 피드백 없음 - 초기 메시지 표시');
+                initialMessage.style.display = 'block';
+                initialMessage.style.visibility = 'visible';
+                initialMessage.style.position = 'relative';
+                initialMessage.style.height = 'auto';
+                initialMessage.style.minHeight = '200px';
+                initialMessage.style.padding = '50px 0';
+                initialMessage.style.opacity = '1';
+            }
         }
     });
     
     // 멤버 옵션 클릭 이벤트 설정
     memberOptions.forEach(option => {
         option.addEventListener('click', function() {
+            console.log('멤버 옵션 클릭');
+            
             // 멤버 ID 가져오기
             const memberId = this.getAttribute('data-member');
             const selectedFeedback = document.getElementById(memberId + '-feedback');
@@ -255,6 +292,7 @@ function setupMemberDropdowns() {
             
             // 이미 선택된 옵션인지 확인
             if (this.classList.contains('active')) {
+                console.log('이미 선택된 옵션');
                 return; // 이미 활성화된 경우 완료
             }
             
@@ -298,13 +336,17 @@ function setupMemberDropdowns() {
             // 드롭다운 닫기
             dropdownContent.classList.remove('show');
             
-            // 초기 메시지 완전히 제거
+            // 초기 메시지 완전히 제거 (이 부분 강화)
             if (initialMessage) {
+                console.log('멤버 선택시 초기 메시지 제거');
+                initialMessage.style.display = 'none'; // display 속성 사용
                 initialMessage.style.visibility = 'hidden';
                 initialMessage.style.position = 'absolute';
                 initialMessage.style.height = '0';
                 initialMessage.style.minHeight = '0';
                 initialMessage.style.padding = '0';
+                initialMessage.style.opacity = '0';
+                initialMessage.style.pointerEvents = 'none';
             }
             
             // 모든 피드백 완전히 제거

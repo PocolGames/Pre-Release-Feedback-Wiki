@@ -101,6 +101,7 @@
     width: 100%;
 }
 
+/* 초기 메시지 스타일 수정 */
 .initial-message {
     text-align: center;
     padding: 50px 0;
@@ -114,6 +115,35 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.3s ease;
+}
+
+/* 멤버 피드백 활성화 시 초기 메시지 완전히 숨김 */
+.member-feedback.active ~ .initial-message,
+.member-feedback.active + .initial-message,
+.feedback-container:has(.member-feedback.active) .initial-message {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    z-index: -1 !important;
+}
+
+/* 멤버 피드백이 어떤 것이라도 활성화되면 초기 메시지 숨김 */
+.initial-message.hidden {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    z-index: -1 !important;
 }
 
 .member-feedback {
@@ -126,6 +156,7 @@
     width: 100%;
     transition: opacity 0.3s ease;
     padding: 0 20px;
+    z-index: 6; /* 초기 메시지보다 높은 z-index */
 }
 
 .member-feedback.active {
