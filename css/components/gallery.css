@@ -23,34 +23,42 @@
     color: var(--text-color);
 }
 
+/* 갤러리 드롭다운 수정된 스타일 */
+
+/* 드롭다운 컨테이너 */
 .filter-dropdown {
     position: relative;
     width: 100%;
+    z-index: 100;
 }
 
+/* 드롭다운 버튼 */
 .filter-btn {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
     padding: 10px 15px;
-    border: 1px solid var(--border-color);
+    border: 1px solid #b2bec3;
     border-radius: 5px;
-    background-color: var(--bg-color-secondary);
-    color: var(--text-color);
+    background-color: #dfe6e9;
+    color: #2d3436;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
+    z-index: 99;
 }
 
 .filter-btn:hover {
-    border-color: var(--primary-color);
+    border-color: #0984e3;
 }
 
 .filter-btn.active {
-    border-color: var(--primary-color);
-    background-color: rgba(var(--primary-rgb), 0.1);
+    border-color: #0984e3;
+    background-color: rgba(9, 132, 227, 0.1);
 }
 
+/* 드롭다운 옵션 컨테이너 */
 .filter-options {
     position: absolute;
     top: 100%;
@@ -58,51 +66,56 @@
     width: 100%;
     max-height: 0;
     overflow: hidden;
-    background-color: var(--bg-color-secondary);
+    background-color: #dfe6e9;
+    border: 1px solid #b2bec3;
     border-radius: 0 0 5px 5px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     transition: max-height 0.3s ease, opacity 0.3s ease;
     opacity: 0;
-    z-index: 10;
+    z-index: 98;
 }
 
 .filter-options.show {
     max-height: 250px;
     opacity: 1;
     overflow-y: auto;
-    border: 1px solid var(--border-color);
+    border: 1px solid #b2bec3;
     border-top: none;
+    background-color: #dfe6e9;
+    display: block;
 }
 
+/* 드롭다운 옵션 항목 */
 .filter-option {
     display: block;
     width: 100%;
     padding: 10px 15px;
     text-align: left;
-    background: none;
+    background-color: #dfe6e9;
     border: none;
-    color: var(--text-color);
+    color: #2d3436;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    font-weight: normal;
 }
 
 .filter-option:hover {
-    background-color: rgba(var(--primary-rgb), 0.05);
+    background-color: rgba(9, 132, 227, 0.1);
 }
 
 .filter-option.active {
-    background-color: rgba(var(--primary-rgb), 0.1);
-    color: var(--primary-color);
+    background-color: rgba(9, 132, 227, 0.2);
+    color: #0984e3;
     font-weight: 500;
 }
 
 .filter-clear {
     padding: 10px 20px;
     margin-left: auto;
-    background-color: transparent;
-    border: 1px solid var(--border-color);
+    background-color: #dfe6e9;
+    border: 1px solid #b2bec3;
     border-radius: 5px;
-    color: var(--text-color);
+    color: #2d3436;
     cursor: pointer;
     transition: all 0.3s ease;
 }
