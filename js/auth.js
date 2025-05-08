@@ -291,8 +291,19 @@ function createLoginOverlay(id) {
     const overlay = document.createElement('div');
     overlay.className = 'login-overlay';
     overlay.id = `${id}-overlay`;
+    
+    // 페이지에 따라 다른 메시지 표시
+    let message = '';
+    if (id === 'gallery') {
+        message = '갤러리를 보려면 로그인이 필요합니다.'; // 더 짧게 수정
+    } else if (id === 'feedback') {
+        message = '피드백을 보려면 로그인이 필요합니다.'; // 더 짧게 수정
+    } else {
+        message = '로그인이 필요한 페이지입니다.';
+    }
+    
     overlay.innerHTML = `
-        <p>로그인이 필요한 페이지입니다.</p>
+        <p>${message}</p>
         <button class="goto-login-btn">로그인 하기</button>
     `;
     
