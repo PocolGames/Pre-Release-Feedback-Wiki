@@ -263,7 +263,11 @@ function handleRestrictedContent() {
                 
                 // 오버레이 생성 및 추가
                 const overlay = createLoginOverlay('gallery');
-                gallerySection.parentNode.insertBefore(overlay, gallerySection);
+                document.body.appendChild(overlay);
+                // 사용자 경험 개선을 위해 애니메이션 효과 추가
+                setTimeout(() => {
+                    overlay.classList.add('show');
+                }, 10);
             }
             
             // 피드백 페이지 제한 처리
@@ -272,12 +276,11 @@ function handleRestrictedContent() {
                 
                 // 오버레이 생성 및 추가
                 const overlay = createLoginOverlay('feedback');
-                feedbackSection.parentNode.insertBefore(overlay, feedbackSection);
-            }
-            
-            // 페이지 상단으로 스크롤
-            if (currentPage === 'gallery' || currentPage === 'feedback') {
-                window.scrollTo(0, 0);
+                document.body.appendChild(overlay);
+                // 사용자 경험 개선을 위해 애니메이션 효과 추가
+                setTimeout(() => {
+                    overlay.classList.add('show');
+                }, 10);
             }
         }
     }
