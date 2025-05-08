@@ -635,7 +635,48 @@ class GalleryManager {
             </div>
         `;
     }
+
+    /**
+     * 작업자로 필터링
+     * @param {string} author - 작업자 이름
+     */
+    filterByAuthor(author) {
+        // 작업자 필터 설정
+        this.updateFilter('author', author);
+        
+        // UI 업데이트 - 작업자 드롭다운 버튼
+        const authorFilter = document.getElementById('author-filter');
+        if (authorFilter) {
+            authorFilter.querySelector('.filter-text').textContent = author;
+            
+            // 필터 옵션 업데이트
+            const options = document.querySelectorAll('#author-options .filter-option');
+            options.forEach(option => {
+                option.classList.remove('active');
+                if (option.textContent.trim() === author) {
+                    option.classList.add('active');
+                }
+            });
+        }
+        
+        // 필터 적용
+        this.applyFilters();
+        
+        console.log(`작업자 필터 적용: ${author}`);
+    }
 }
 
-// 갤러리 모듈 내보내기
-export default GalleryManager;
+// 갤러리 모듈 전역으로 노출
+// 모듈식과 비모듈식 모두에서 동작하도록 설정
+if (typeof module !== 'undefined' && module.exports) {
+    // Node.js 환경이나 CommonJS 모듈 시스템에서
+    module.exports = GalleryManager;
+} else if (typeof define === 'function' && define.amd) {
+    // AMD 모듈 시스템에서
+    define([], function() {
+        return GalleryManager;
+    });
+} else {
+    // 브라우저 전역 객체에 추가
+    window.GalleryManager = GalleryManager;
+}
