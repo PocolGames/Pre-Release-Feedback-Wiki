@@ -40,6 +40,9 @@ function checkLoginStatus() {
     
     // 로그인 상태에 따라 UI 업데이트
     updateUIByLoginStatus();
+    
+    // 콘솔에 로그인 상태 출력 (디버깅용)
+    console.log('로그인 상태:', isLoggedIn);
 }
 
 // 로그인 버튼 설정
@@ -48,9 +51,23 @@ function setupLoginButton() {
     const passwordInput = document.getElementById('password-input');
     const loginError = document.getElementById('login-error');
     
+    // 이미 로그인되어 있는 경우 UI 업데이트
+    if (isLoggedIn && loginButton && loginError && passwordInput) {
+        loginError.textContent = '이미 로그인되어 있습니다.';
+        loginError.style.color = 'var(--accent-color)';
+        loginError.classList.add('login-success');
+        loginButton.textContent = '환영합니다!';
+        loginButton.classList.add('login-success-btn');
+        passwordInput.disabled = true;
+        passwordInput.value = '********';
+    }
+    
     if (loginButton && passwordInput) {
         // 로그인 버튼 클릭 이벤트
         loginButton.addEventListener('click', function() {
+            // 이미 로그인된 상태이면 무시
+            if (isLoggedIn) return;
+            
             // 올바른 비밀번호 확인
             if (passwordInput.value === 'pre') {
                 // 로그인 성공
@@ -75,6 +92,9 @@ function setupLoginButton() {
                 // UI 업데이트
                 updateUIByLoginStatus();
                 
+                // 콘솔에 로그인 성공 메시지 (디버깅용)
+                console.log('로그인 성공!');
+                
                 // 홈 화면으로 이동 (1초 지연)
                 setTimeout(() => {
                     window.location.hash = 'home';
@@ -87,6 +107,9 @@ function setupLoginButton() {
                 // 입력 필드 초기화
                 passwordInput.value = '';
                 passwordInput.focus();
+                
+                // 콘솔에 로그인 실패 메시지 (디버깅용)
+                console.log('로그인 실패: 비밀번호 불일치');
             }
         });
         
@@ -95,6 +118,13 @@ function setupLoginButton() {
             if (e.key === 'Enter') {
                 loginButton.click();
             }
+        });
+    } else {
+        // 요소를 찾지 못한 경우 콘솔에 오류 메시지 출력 (디버깅용)
+        console.error('로그인 요소를 찾을 수 없습니다:', {
+            loginButton: !!loginButton,
+            passwordInput: !!passwordInput,
+            loginError: !!loginError
         });
     }
 }
@@ -125,7 +155,8 @@ function updateUIByLoginStatus() {
             // 클릭 이벤트 변경 (데이터 속성 추가)
             loginNav.setAttribute('data-action', 'logout');
             
-            // 로그아웃 이벤트 리스너 추가
+            // 기존 이벤트 리스너 제거 후 새로 추가 (중복 방지)
+            loginNav.removeEventListener('click', handleLogout);
             loginNav.addEventListener('click', handleLogout);
         } else {
             // 로그아웃 상태이면 "로그인"으로 변경
@@ -134,30 +165,51 @@ function updateUIByLoginStatus() {
             // 데이터 속성 제거
             loginNav.removeAttribute('data-action');
             
-            // 이전 이벤트 리스너 제거 시도
+            // 이전 이벤트 리스너 제거
             loginNav.removeEventListener('click', handleLogout);
         }
+    } else {
+        console.error('로그인 네비게이션 요소를 찾을 수 없습니다.');
     }
     
     // 제한된 콘텐츠 처리 호출
     handleRestrictedContent();
     
     // 해시 변경 없이 현재 화면 새로고침 효과를 주기 위해
-    // 현재 페이지 다시 로드
+    // 현재 페이지 다시 로드 (showPage 함수가 존재하는지 확인)
     const currentHash = window.location.hash.substring(1) || 'home';
-    showPage(currentHash);
+    if (typeof showPage === 'function') {
+        showPage(currentHash);
+    } else {
+        console.error('showPage 함수를 찾을 수 없습니다.');
+        // 페이지 전환 함수가 없는 경우 대체 로직 (필요시)
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('hidden-section');
+            section.classList.remove('active-section');
+        });
+        
+        const targetSection = document.getElementById(currentHash);
+        if (targetSection) {
+            targetSection.classList.remove('hidden-section');
+            targetSection.classList.add('active-section');
+        }
+    }
 }
 
 // 로그아웃 처리
 function handleLogout(e) {
+    e.preventDefault(); // 기본 이벤트 방지
+    
+    // data-action 속성이 logout인지 확인
     if (this.getAttribute('data-action') === 'logout') {
-        e.preventDefault();
-        
         // 로그아웃 확인
         if (confirm('로그아웃 하시겠습니까?')) {
             // 로그아웃 처리
             isLoggedIn = false;
             localStorage.removeItem('isLoggedIn');
+            
+            // 콘솔에 로그아웃 메시지 (디버깅용)
+            console.log('로그아웃 성공!');
             
             // 공통 요소에서 로그인 상태 표시 제거
             document.body.classList.remove('logged-in');
@@ -171,6 +223,9 @@ function handleLogout(e) {
                 window.location.hash = 'home';
             }
         }
+    } else {
+        // 일반 네비게이션 동작 (로그아웃이 아닌 경우)
+        console.log('일반 네비게이션 - 로그인 페이지로 이동');
     }
 }
 
@@ -230,21 +285,21 @@ function handleRestrictedContent() {
 
 // 로그인 오버레이 생성 함수
 function createLoginOverlay(id) {
-const overlay = document.createElement('div');
-overlay.className = 'login-overlay';
-overlay.id = `${id}-overlay`;
-overlay.innerHTML = `
-<p>로그인이 필요한 페이지입니다.</p>
-<button class="goto-login-btn">로그인 하기</button>
-`;
-
-// 로그인 버튼 이벤트 리스너
-const loginBtn = overlay.querySelector('.goto-login-btn');
-loginBtn.addEventListener('click', function() {
-window.location.hash = 'login';
-});
-
-return overlay;
+    const overlay = document.createElement('div');
+    overlay.className = 'login-overlay';
+    overlay.id = `${id}-overlay`;
+    overlay.innerHTML = `
+        <p>로그인이 필요한 페이지입니다.</p>
+        <button class="goto-login-btn">로그인 하기</button>
+    `;
+    
+    // 로그인 버튼 이벤트 리스너
+    const loginBtn = overlay.querySelector('.goto-login-btn');
+    loginBtn.addEventListener('click', function() {
+        window.location.hash = 'login';
+    });
+    
+    return overlay;
 }
 
 

@@ -160,18 +160,35 @@ function loadData() {
     });
 
     // 갤러리 매니저 초기화
-    import('./components/galleryManager.js')
-        .then(module => {
-            const GalleryManager = module.default;
-            window.galleryManager = new GalleryManager();
-        })
-        .catch(error => {
-            console.error('갤러리 관리자 로드 실패:', error);
+    // 비모듈 방식으로 갤러리 관리자 로드
+    try {
+        // 스크립트 동적 추가
+        const galleryScript = document.createElement('script');
+        galleryScript.src = 'js/components/galleryManager.js';
+        galleryScript.onload = function() {
+            // 갤러리 관리자 초기화 (스크립트가 로드된 후)
+            if (typeof GalleryManager !== 'undefined') {
+                window.galleryManager = new GalleryManager();
+                console.log('갤러리 관리자 로드 성공');
+            } else {
+                console.error('GalleryManager 클래스를 찾을 수 없습니다.');
+            }
+        };
+        galleryScript.onerror = function() {
+            console.error('갤러리 관리자 스크립트 로드 실패');
             const galleryGrid = document.querySelector('.gallery-grid');
             if (galleryGrid) {
                 galleryGrid.innerHTML = '<div class="error-message">갤러리를 불러오는 데 실패했습니다.</div>';
             }
-        });
+        };
+        document.head.appendChild(galleryScript);
+    } catch (error) {
+        console.error('갤러리 관리자 로드 실패:', error);
+        const galleryGrid = document.querySelector('.gallery-grid');
+        if (galleryGrid) {
+            galleryGrid.innerHTML = '<div class="error-message">갤러리를 불러오는 데 실패했습니다.</div>';
+        }
+    }
 }
 
 // 포스트 로드
