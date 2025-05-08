@@ -250,8 +250,8 @@
     pointer-events: all;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
-    /* 중앙 정렬 */
-    left: 50%;
+    /* 내부 패널 중앙 정렬 */
+    left: calc(50% + 125px); /* 250px 롌바 누적편이가 있으므로 50%에 그 편이의 절반을 바로잡아줌 */
     top: 50%;
     transform: translate(-50%, -50%);
     /* 애니메이션 초기 상태 */
@@ -349,4 +349,15 @@
 .login-overlay button:active {
     transform: translateY(-1px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 반응형 로그인 오버레이 */
+@media screen and (max-width: 768px) {
+    .login-overlay {
+        left: 50%; /* 모바일에서는 화면 중앙에 배치 */
+        width: 90%;
+        max-width: 90%;
+        padding: 25px 20px;
+        top: 40%; /* 하단 네브바를 피해서 위치 조정 */
+    }
 }
