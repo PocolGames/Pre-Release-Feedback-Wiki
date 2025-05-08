@@ -70,6 +70,18 @@ function setupNavigation() {
 // 해시 변경 처리
 function handleHashChange() {
     let pageId = window.location.hash.substring(1) || 'home';
+    console.log('해시 변경 처리: 페이지 ID =', pageId);
+    
+    // 로그인 페이지로 이동할 때 모든 로그인 오버레이 제거
+    if (pageId === 'login') {
+        const allOverlays = document.querySelectorAll('.login-overlay');
+        if (allOverlays.length > 0) {
+            console.log('로그인 페이지로 이동: 모든 오버레이 제거');
+            allOverlays.forEach(overlay => {
+                overlay.parentNode.removeChild(overlay);
+            });
+        }
+    }
     
     // 특수 페이지 처리 (apply-info는 상단 메뉴에 없음)
     if (pageId === 'apply-info') {
@@ -93,7 +105,7 @@ function handleHashChange() {
     // 제한된 콘텐츠 처리 - 지연 시간을 늘려 페이지 전환 효과가 끝난 후 실행되도록 함
     setTimeout(handleRestrictedContent, 200);
     
-    console.log('페이지 전환:', pageId);
+    console.log('페이지 전환 완료:', pageId);
 }
 
 // 메뉴 활성화 상태 업데이트
@@ -109,6 +121,23 @@ function updateActiveMenu(pageId) {
 
 // 페이지 표시
 function showPage(pageId) {
+    console.log('페이지 표시 함수 실행:', pageId);
+    
+    // 로그인 페이지로 전환 시 제한된 콘텐츠 처리
+    if (pageId === 'login') {
+        // 모든 섹션에서 제한된 상태 클래스 제거
+        document.querySelectorAll('.restricted-content').forEach(section => {
+            section.classList.remove('restricted-content');
+        });
+        
+        // 오버레이 제거 (이중 처리를 위해 추가로 여기서도 제거)
+        document.querySelectorAll('.login-overlay').forEach(overlay => {
+            if (overlay && overlay.parentNode) {
+                overlay.parentNode.removeChild(overlay);
+            }
+        });
+    }
+    
     const allSections = document.querySelectorAll('main section');
     allSections.forEach(section => {
         section.classList.remove('active-section');
@@ -327,8 +356,19 @@ function handleRestrictedContent() {
     const currentPage = window.location.hash.substring(1) || 'home';
     console.log('현재 페이지:', currentPage);
     
-    // 로그인 페이지인 경우 오버레이 처리하지 않고 종료
+    // 로그인 페이지인 경우, 모든 오버레이 제거하고 제한 클래스 제거
     if (currentPage === 'login') {
+        // 모든 오버레이 제거
+        const allOverlays = document.querySelectorAll('.login-overlay');
+        allOverlays.forEach(overlay => {
+            console.log('로그인 페이지 전환 - 오버레이 제거:', overlay.id);
+            overlay.parentNode.removeChild(overlay);
+        });
+        
+        // 모든 제한 클래스 제거
+        if (gallerySection) gallerySection.classList.remove('restricted-content');
+        if (feedbackSection) feedbackSection.classList.remove('restricted-content');
+        
         return;
     }
     
@@ -362,8 +402,10 @@ function handleRestrictedContent() {
                 
                 // 애니메이션 활성화를 위한 클래스 추가
                 setTimeout(() => {
-                    galleryOverlay.classList.add('show');
-                }, 10);
+                    if (galleryOverlay && galleryOverlay.parentNode) { // 추가 안전성 검사
+                        galleryOverlay.classList.add('show');
+                    }
+                }, 50); // 지연 시간 증가
                 
                 console.log('갤러리 오버레이 추가됨');
             }
@@ -379,8 +421,10 @@ function handleRestrictedContent() {
                 
                 // 애니메이션 활성화를 위한 클래스 추가
                 setTimeout(() => {
-                    feedbackOverlay.classList.add('show');
-                }, 10);
+                    if (feedbackOverlay && feedbackOverlay.parentNode) { // 추가 안전성 검사
+                        feedbackOverlay.classList.add('show');
+                    }
+                }, 50); // 지연 시간 증가
                 
                 console.log('피드백 오버레이 추가됨');
             }
@@ -395,11 +439,22 @@ function handleRestrictedContent() {
 
 // 로그인 오버레이 생성 함수
 function createLoginOverlay(id) {
+    console.log(`오버레이 생성 시작: ${id}-overlay`);
+    
     // 기존 오버레이 제거 (동일 ID가 있는 경우)
     const existingOverlay = document.getElementById(`${id}-overlay`);
     if (existingOverlay) {
-        existingOverlay.parentNode.removeChild(existingOverlay);
-        console.log(`기존 ${id} 오버레이 제거됨`);
+        if (existingOverlay.parentNode) {
+            existingOverlay.parentNode.removeChild(existingOverlay);
+            console.log(`기존 ${id} 오버레이 제거됨`);
+        }
+    }
+    
+    // 로그인 페이지로 이미 전환 중이면 오버레이 생성하지 않음
+    const currentPage = window.location.hash.substring(1) || 'home';
+    if (currentPage === 'login') {
+        console.log('로그인 페이지로 이미 전환 중 - 오버레이 생성 취소');
+        return null;
     }
     
     const overlay = document.createElement('div');
@@ -421,10 +476,13 @@ function createLoginOverlay(id) {
     
     // 로그인 버튼 이벤트 리스너
     const loginBtn = overlay.querySelector('.goto-login-btn');
-    loginBtn.addEventListener('click', function() {
-        window.location.hash = 'login';
-    });
+    if (loginBtn) {
+        loginBtn.addEventListener('click', function() {
+            window.location.hash = 'login';
+        });
+    }
     
+    console.log(`오버레이 생성 완료: ${id}-overlay`);
     return overlay;
 }
 
