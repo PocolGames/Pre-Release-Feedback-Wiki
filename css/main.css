@@ -16,6 +16,7 @@
 @import 'components/gallery.css';
 @import 'components/feedback.css';
 @import 'components/login.css';
+@import 'components/lightbox.css';
 
 /* 반응형 스타일 */
 @import 'responsive.css';

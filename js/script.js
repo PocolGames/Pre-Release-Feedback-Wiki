@@ -145,17 +145,6 @@ function loadData() {
             document.getElementById('posts-container').innerHTML = '<div class="error-message">포스트 데이터를 불러오는 데 실패했습니다.</div>';
         });
     
-    // 프로젝트 데이터 로드
-    fetch('data/projects.json')
-        .then(response => response.json())
-        .then(data => {
-            loadProjects(data);
-        })
-        .catch(error => {
-            console.error('프로젝트 데이터 로드 실패:', error);
-            document.querySelector('.gallery-grid').innerHTML = '<div class="error-message">프로젝트 데이터를 불러오는 데 실패했습니다.</div>';
-        });
-    
     // 멤버 및 피드백 데이터 로드
     Promise.all([
         fetch('data/members.json').then(res => res.json()),
@@ -169,6 +158,20 @@ function loadData() {
         console.error('멤버/피드백 데이터 로드 실패:', error);
         document.querySelector('.member-tabs').innerHTML = '<div class="error-message">데이터를 불러오는 데 실패했습니다.</div>';
     });
+
+    // 갤러리 매니저 초기화
+    import('./components/galleryManager.js')
+        .then(module => {
+            const GalleryManager = module.default;
+            window.galleryManager = new GalleryManager();
+        })
+        .catch(error => {
+            console.error('갤러리 관리자 로드 실패:', error);
+            const galleryGrid = document.querySelector('.gallery-grid');
+            if (galleryGrid) {
+                galleryGrid.innerHTML = '<div class="error-message">갤러리를 불러오는 데 실패했습니다.</div>';
+            }
+        });
 }
 
 // 포스트 로드
@@ -205,45 +208,6 @@ function loadPosts(data) {
     
     // 이벤트 리스너 설정
     setupPostInteractions();
-}
-
-// 프로젝트 로드
-function loadProjects(data) {
-    const galleryGrid = document.querySelector('.gallery-grid');
-    if (!galleryGrid) return;
-    
-    let projectsHTML = '';
-    
-    // 프로젝트 데이터로 HTML 생성
-    data.projects.forEach(project => {
-        projectsHTML += `
-            <div class="gallery-item ${project.category}">
-                <div class="gallery-image ${project.image ? '' : 'placeholder'}">
-                    ${project.image 
-                        ? `<img src="${project.image}" alt="${project.title}">` 
-                        : `<div class="image-placeholder">${project.categoryName} 작업물</div>`
-                    }
-                </div>
-                <div class="gallery-info">
-                    <h3>${project.title}</h3>
-                    <p>${project.author}</p>
-                    <div class="gallery-links">
-                        <a href="#" class="view-btn" data-id="${project.id}"><i class="fas fa-eye"></i> 자세히 보기</a>
-                        ${project.github 
-                            ? `<a href="${project.github}" target="_blank" class="github-btn"><i class="fab fa-github"></i> GitHub</a>` 
-                            : ''
-                        }
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-    
-    galleryGrid.innerHTML = projectsHTML;
-    
-    // 이벤트 리스너 설정
-    setupGalleryEvents(data);
-    setupGalleryFilter();
 }
 
 // 멤버 로드
@@ -352,99 +316,6 @@ function loadFeedbacks(membersData, feedbacksData) {
     
     // 이벤트 리스너 설정
     setupFeedbackEvents();
-}
-
-// 갤러리 필터링 설정
-function setupGalleryFilter() {
-    const filterBtns = document.querySelectorAll('.gallery-tabs .tab-btn');
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // 모든 버튼에서 active 클래스 제거
-            filterBtns.forEach(b => b.classList.remove('active'));
-            
-            // 클릭한 버튼에 active 클래스 추가
-            this.classList.add('active');
-            
-            // 필터 카테고리 가져오기
-            const category = this.getAttribute('data-category');
-            
-            // 갤러리 아이템 필터링
-            galleryItems.forEach(item => {
-                if (category === 'all' || item.classList.contains(category)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        });
-    });
-}
-
-// 갤러리 이벤트 설정
-function setupGalleryEvents(projectsData) {
-    // 자세히 보기 버튼 이벤트
-    const viewButtons = document.querySelectorAll('.view-btn');
-    viewButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const projectId = this.getAttribute('data-id');
-            showProjectDetails(projectId, projectsData);
-        });
-    });
-}
-
-// 프로젝트 상세 보기 표시
-function showProjectDetails(projectId, projectsData) {
-    const project = projectsData.projects.find(p => p.id === projectId);
-    
-    if (!project) {
-        alert('프로젝트 정보를 찾을 수 없습니다.');
-        return;
-    }
-    
-    // 모달 생성
-    const modal = document.createElement('div');
-    modal.classList.add('project-modal');
-    
-    // 모달 내용 설정
-    modal.innerHTML = `
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>${project.title}</h2>
-            <p class="project-author">제작자: ${project.author}</p>
-            <div class="project-details">
-                ${project.description.map(p => `<p>${p}</p>`).join('')}
-            </div>
-            ${project.images && project.images.length > 0 ?
-                `<div class="project-gallery">
-                    ${project.images.map(img => `<img src="${img}" alt="${project.title}">`).join('')}
-                </div>` : ''
-            }
-            ${project.github ?
-                `<a href="${project.github}" target="_blank" class="github-btn">
-                    <i class="fab fa-github"></i> GitHub 바로가기
-                </a>` : ''
-            }
-        </div>
-    `;
-    
-    // 모달 추가 및 표시
-    document.body.appendChild(modal);
-    
-    // 모달 닫기 버튼 이벤트
-    const closeButton = modal.querySelector('.close-modal');
-    closeButton.addEventListener('click', function() {
-        document.body.removeChild(modal);
-    });
-    
-    // 모달 외부 클릭 시 닫기
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            document.body.removeChild(modal);
-        }
-    });
 }
 
 // 멤버 드롭다운 설정
@@ -583,12 +454,17 @@ function setupFeedbackEvents() {
             // 갤러리 페이지로 이동
             setTimeout(() => {
                 const memberId = this.getAttribute('data-filter');
-                const memberCategory = memberId.includes('programmer') ? 'programmer' : 'designer';
                 
-                // 해당 카테고리 필터 버튼 찾기
-                const filterBtn = document.querySelector(`.gallery-tabs .tab-btn[data-category="${memberCategory}"]`);
-                if (filterBtn) {
-                    filterBtn.click();
+                // 멤버 정보를 기반으로 갤러리 필터 설정
+                if (window.galleryManager) {
+                    // 멤버 ID에 따라 작업자 필터 설정
+                    const membersMatch = memberId.match(/^(\w+)(\d+)?$/);
+                    if (membersMatch) {
+                        const memberName = document.querySelector(`.member-option[data-member="${memberId}"]`).textContent;
+                        if (memberName) {
+                            window.galleryManager.filterByAuthor(memberName);
+                        }
+                    }
                 }
             }, 100);
         });
