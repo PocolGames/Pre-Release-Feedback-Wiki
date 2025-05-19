@@ -241,16 +241,15 @@
             "date": "2025-05-07",
             "content": [
                 "1주차",
-                "맵에 오브젝트를 미리 배치해둔 것을 볼 수가 있는데, 지금은 시간이 없어서 이런 방식을 채택했을 수도 있습니다.",
-                "최적화 방식에서 코드로 오브젝트를 배치하는 경우도 존재하기 때문에 고려해봤으면 좋겠습니다.",
-                "메서드 캡슐화는 잘 되어있습니다.",
-                "<code>GameManager</code> 스크립트에서 <code>Locate Materixes</code>변수에 <code>Transform</code>을 하나하나 캐싱한 것으로 보이는 데, 이러한 경우는 코드로 캐싱을 하는 편이 유지보수에 더 유리할 수 있습니다.",
-                "<code>string</code> 변수에 한글을 넣어서 <code>if</code>문을 사용한 것으로 보이는데, 이러한 경우는 <code>swtich</code>을 사용하거나 <code>enum</code>을 사용하는 것이 좋습니다.",
+                "맵에 오브젝트를 미리 배치해둔 것을 볼 수가 있는데, 지금은 시간이 없어서 이런 방식을 채택했을 수도 있다.",
+                "최적화 방식에서 코드로 오브젝트를 배치하는 경우도 존재하기 때문에 고려해봤으면 좋겠다.",
+                "<code>GameManager</code> 스크립트에서 <code>Locate Materixes</code>변수에 <code>Transform</code>을 하나하나 캐싱한 것으로 보이는 데, 이러한 경우는 코드로 캐싱을 하는 편이 유지보수에 더 유리할 수 있다.",
+                "<code>string</code> 변수에 한글을 넣어서 <code>if</code>문을 사용한 것으로 보이는데, 이러한 경우는 <code>swtich</code>을 사용하거나 <code>enum</code>을 사용하는 것이 좋다.",
                 "<code>string</code>변수에 한글을 넣어서 사용하는 것은 추천하지 않습니다. 영어를 사용하는 것을 권장드립니다.",
                 "2주차",
-                "코드가 많이 반복되는 것을 볼 수가 있는데, 줄일 수 있는 구문은 줄여서 작성하는 것이 좋습니다.",
-                "<code>Destroy</code> 구문을 사용하여 <code>GameObject</code>를 삭제하는 코드가 많이 보이는 데, 자주 사용하는 구문일 경우 Object Pooling을 사용하는 것이 좋습니다.",
-                "<code>Invoke</code> 구문은 현재 사용하지 않는 함수입니다, <code>Coroutine</code>을 사용하는 것을 권장드립니다."
+                "코드가 많이 반복되는 것을 볼 수가 있는데, 줄일 수 있는 구문은 줄여서 작성하는 것이 좋다.",
+                "<code>Destroy</code> 구문을 사용하여 <code>GameObject</code>를 삭제하는 코드가 많이 보이는 데, 자주 사용하는 구문일 경우 Object Pooling을 사용하는 것이 좋다.",
+                "<code>Invoke</code> 구문은 현재 사용하지 않는 함수입니다, <code>Coroutine</code>을 사용하는 것을 권장한다."
             ]
         },
         {
@@ -317,7 +316,7 @@
             "id": "feedback27",
             "memberId": "kangwoosung",
             "title": "Code Feedback Session 3",
-            "date": "2025-05-15",
+            "date": "2025-05-14",
             "content":[
                 "<code>if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false)</code>이러한 코드의 경우 using 선언문을 사용하는 것을 추천.",
                 "<code>GameObject.Find(\"Background\").transform.position</code>에서 <code>Find( )</code>는 최적화 문제로 사용하지 말 것.",
@@ -330,7 +329,7 @@
             "id": "feedback28",
             "memberId": "parkseongbin",
             "title": "Code Feedback Session 3",
-            "date": "2025-05-15",
+            "date": "2025-05-14",
             "content":[
                 "git 폴더에 유니티 프로젝트 여러개 생성하지 말 것.",
                 "branch를 잘 사용해서 효율적인 폴더 환경을 만들 것."
@@ -340,9 +339,11 @@
             "id": "feedback29",
             "memberId": "chawoosoek",
             "title": "Code Feedback Session 3",
-            "date": "2025-05-15",
+            "date": "2025-05-14",
             "content":[
-                "<code>Text</code> 컴포넌트 금지"
+                "<code>Text</code> 컴포넌트 금지",
+                "짧은 코드량에 비해 충분히 재미있는 게임을 만들었다.",
+                "다음에는 복잡한 로직을 이용하여 게임을 만들어보는 것을 추천한다."
             ]
         }
     ]
