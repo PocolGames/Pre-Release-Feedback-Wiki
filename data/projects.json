@@ -366,12 +366,20 @@
             "author":"남지현",
             "category":"designer",
             "categoryName":"디자이너",
-            "image":"",
+            "image":"Image/디자이너/남지현/Art_Feedback_Session_3/00.png",
             "description":[
                 "남지현입니다."
             ],
             "github":"",
-            "images":[]
+            "images":[
+                "Image/디자이너/남지현/Art_Feedback_Session_3/00.png",
+                "Image/디자이너/남지현/Art_Feedback_Session_3/01.png",
+                "Image/디자이너/남지현/Art_Feedback_Session_3/02.png",
+                "Image/디자이너/남지현/Art_Feedback_Session_3/03.png",
+                "Image/디자이너/남지현/Art_Feedback_Session_3/04.png",
+                "Image/디자이너/남지현/Art_Feedback_Session_3/05.png",
+                "Image/디자이너/남지현/Art_Feedback_Session_3/06.png"
+            ]
         },
         {
             "id":"project18",
